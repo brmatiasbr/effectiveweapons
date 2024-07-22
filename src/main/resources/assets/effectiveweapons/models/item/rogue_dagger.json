@@ -1,0 +1,21 @@
+{
+  "credit": "Made with Blockbench",
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "effectiveweapons:item/rogue_dagger"
+  },
+  "display": {
+    "thirdperson_righthand": {
+      "rotation": [-122, 90, 0],
+      "translation": [0, -9.75, 2.5]
+    },
+    "thirdperson_lefthand": {
+      "rotation": [-122, -90, 0],
+      "translation": [0, -9.75, 1.75]
+    },
+    "head": {
+      "rotation": [0, 0, -88],
+      "translation": [-7.25, 7.25, 0.5]
+    }
+  }
+}

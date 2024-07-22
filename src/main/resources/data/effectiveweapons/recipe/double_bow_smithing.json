@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": {
+    "item": "minecraft:experience_bottle"
+  },
+  "base": {
+    "item": "minecraft:bow"
+  },
+  "result": {
+    "count": 1,
+    "id": "effectiveweapons:double_bow"
+  },
+  "template": {
+    "item": "effectiveweapons:double_bow_smithing_template"
+  }
+}

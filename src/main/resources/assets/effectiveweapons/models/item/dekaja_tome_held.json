@@ -1,0 +1,149 @@
+{
+	"credit": "Made with Blockbench",
+	"texture_size": [32, 32],
+	"textures": {
+		"0": "effectiveweapons:item/dekaja_tome_held",
+		"particle": "effectiveweapons:item/dekaja_tome_held"
+	},
+	"elements": [
+		{
+			"name": "coverLeft",
+			"from": [7.3, 0.2, 5],
+			"to": [7.3, 7.2, 12],
+			"rotation": {"angle": 45, "axis": "z", "origin": [7.3, 1.2, 8.5]},
+			"faces": {
+				"north": {"uv": [0, 0, 0, 3.5], "texture": "#0"},
+				"east": {"uv": [0, 0, 3.5, 3.5], "texture": "#0"},
+				"south": {"uv": [0, 0, 0, 3.5], "texture": "#0"},
+				"west": {"uv": [0, 3.5, 3.5, 7], "texture": "#0"},
+				"up": {"uv": [0, 3.5, 0, 0], "texture": "#0"},
+				"down": {"uv": [0, 0, 0, 3.5], "texture": "#0"}
+			}
+		},
+		{
+			"name": "coverRight",
+			"from": [10.46777, -0.53223, 5],
+			"to": [10.46777, 6.46777, 12],
+			"rotation": {"angle": -45, "axis": "z", "origin": [10.46777, 2.96777, 8.5]},
+			"faces": {
+				"north": {"uv": [0, 0, 0, 3.5], "texture": "#0"},
+				"east": {"uv": [0, 3.5, 3.5, 7], "texture": "#0"},
+				"south": {"uv": [0, 0, 0, 3.5], "texture": "#0"},
+				"west": {"uv": [0, 0, 3.5, 3.5], "texture": "#0"},
+				"up": {"uv": [0, 3.5, 0, 0], "rotation": 180, "texture": "#0"},
+				"down": {"uv": [0, 0, 0, 3.5], "rotation": 180, "texture": "#0"}
+			}
+		},
+		{
+			"name": "outerLayerRight",
+			"from": [10.46777, -0.73223, 5],
+			"to": [10.46777, 6.26777, 12],
+			"rotation": {"angle": -45, "axis": "z", "origin": [10.46777, 2.76777, 8.5]},
+			"faces": {
+				"north": {"uv": [0, 0, 0, 3.5], "texture": "#0"},
+				"east": {"uv": [0, 7, 3.5, 10.5], "texture": "#0"},
+				"south": {"uv": [0, 0, 0, 3.5], "texture": "#0"},
+				"west": {"uv": [3.5, 8.5, 7, 12], "texture": "#0"},
+				"up": {"uv": [0, 3.5, 0, 0], "rotation": 180, "texture": "#0"},
+				"down": {"uv": [0, 0, 0, 3.5], "rotation": 180, "texture": "#0"}
+			}
+		},
+		{
+			"name": "outerLayerLeft",
+			"from": [5.53223, -0.73223, 5],
+			"to": [5.53223, 6.26777, 12],
+			"rotation": {"angle": 45, "axis": "z", "origin": [5.53223, 2.76777, 8.5]},
+			"faces": {
+				"north": {"uv": [0, 0, 0, 3.5], "texture": "#0"},
+				"east": {"uv": [7, 8.5, 3.5, 12], "texture": "#0"},
+				"south": {"uv": [0, 0, 0, 3.5], "texture": "#0"},
+				"west": {"uv": [3.5, 7, 0, 10.5], "texture": "#0"},
+				"up": {"uv": [0, 3.5, 0, 0], "rotation": 180, "texture": "#0"},
+				"down": {"uv": [0, 0, 0, 3.5], "rotation": 180, "texture": "#0"}
+			}
+		},
+		{
+			"name": "pageLeft",
+			"from": [5.37968, 0.91521, 5.001],
+			"to": [6.37768, 5.91321, 11.999],
+			"rotation": {"angle": 45, "axis": "z", "origin": [5.87868, 3.41421, 8.5]},
+			"faces": {
+				"north": {"uv": [7, 3.5, 7.5, 6], "texture": "#0"},
+				"east": {"uv": [3.5, 6, 7, 8.5], "texture": "#0"},
+				"south": {"uv": [7.5, 3.5, 8, 6], "texture": "#0"},
+				"west": {"uv": [3.5, 3.5, 7, 6], "texture": "#0"},
+				"up": {"uv": [7.5, 3.5, 7, 0], "rotation": 180, "texture": "#0"},
+				"down": {"uv": [8, 0, 7.5, 3.5], "rotation": 180, "texture": "#0"}
+			}
+		},
+		{
+			"name": "pageRight",
+			"from": [8.001, 1.001, 5.001],
+			"to": [8.999, 6.999, 11.999],
+			"rotation": {"angle": -45, "axis": "z", "origin": [8, 2, 8.5]},
+			"faces": {
+				"north": {"uv": [7.5, 3.5, 8, 6.5], "texture": "#0"},
+				"east": {"uv": [3.5, 3, 7, 6], "texture": "#0"},
+				"south": {"uv": [7, 3.5, 7.5, 6.5], "texture": "#0"},
+				"west": {"uv": [3.5, 0, 7, 3], "texture": "#0"},
+				"up": {"uv": [7.5, 3.5, 7, 0], "texture": "#0"},
+				"down": {"uv": [8, 0, 7.5, 3.5], "texture": "#0"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"rotation": [90, 0, 0],
+			"translation": [0, 4, 6.75]
+		},
+		"thirdperson_lefthand": {
+			"rotation": [90, 0, 0],
+			"translation": [0, 4, 6.75]
+		},
+		"firstperson_righthand": {
+			"rotation": [-136, 0, 170],
+			"translation": [0, 5.5, 1.5]
+		},
+		"firstperson_lefthand": {
+			"rotation": [-136, 0, 170],
+			"translation": [0, 5.5, 1.5]
+		},
+		"ground": {
+			"translation": [0, 3.75, 0]
+		}
+	},
+	"groups": [
+		{
+			"name": "tome",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"nbt": "{}",
+			"children": [
+				{
+					"name": "cover",
+					"origin": [8, 1, 8.5],
+					"color": 0,
+					"nbt": "{}",
+					"children": [
+						0,
+						1,
+						{
+							"name": "outerLayer",
+							"origin": [8, 1, 8.5],
+							"color": 0,
+							"nbt": "{}",
+							"children": [2, 3]
+						}
+					]
+				},
+				{
+					"name": "pages",
+					"origin": [7.3, 0.2, 8.5],
+					"color": 0,
+					"nbt": "{}",
+					"children": [4, 5]
+				}
+			]
+		}
+	]
+}

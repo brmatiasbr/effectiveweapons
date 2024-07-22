@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    " I ",
+    "IBI",
+    " L "
+  ],
+  "key": {
+    "B": {
+      "item": "minecraft:experience_bottle"
+    },
+    "I": {
+      "item": "minecraft:iron_block"
+    },
+    "L": {
+      "item": "minecraft:lapis_block"
+    }
+  },
+  "result": {
+    "id": "effectiveweapons:lapis_circlet"
+  }
+}

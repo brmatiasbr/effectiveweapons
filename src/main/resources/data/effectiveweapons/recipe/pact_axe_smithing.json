@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": {
+    "item": "minecraft:experience_bottle"
+  },
+  "base": {
+    "item": "minecraft:iron_axe"
+  },
+  "result": {
+    "count": 1,
+    "id": "effectiveweapons:pact_axe"
+  },
+  "template": {
+    "item": "effectiveweapons:pact_axe_smithing_template"
+  }
+}

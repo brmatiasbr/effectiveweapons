@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": {
+    "item": "minecraft:experience_bottle"
+  },
+  "base": {
+    "item": "effectiveweapons:iron_dagger"
+  },
+  "result": {
+    "count": 1,
+    "id": "effectiveweapons:rogue_dagger"
+  },
+  "template": {
+    "item": "effectiveweapons:rogue_dagger_smithing_template"
+  }
+}

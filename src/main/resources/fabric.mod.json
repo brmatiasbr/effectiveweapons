@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "effectiveweapons",
+  "version": "1.0",
+  "name": "Effective Weapons",
+  "description": "Simple Minecraft mod revolving around weapons and status effects",
+  "authors": ["br_matias_br"],
+  "contact": {
+    "repo": "https://github.com/brmatiasbr/effectiveweapons"
+  },
+  "license": "MIT",
+  "icon": "assets/effectiveweapons/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "net.br_matias_br.effectiveweapons.client.EffectiveWeaponsClient"
+    ],
+    "main": [
+      "net.br_matias_br.effectiveweapons.EffectiveWeapons"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.15.11",
+    "fabric": "*",
+    "minecraft": "1.21"
+  },
+  "mixins": [
+    "effectiveweapons.mixin.json"
+  ]
+}

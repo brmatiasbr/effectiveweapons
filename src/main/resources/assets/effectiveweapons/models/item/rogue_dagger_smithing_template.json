@@ -1,0 +1,6 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "effectiveweapons:item/rogue_dagger_smithing_template"
+  }
+}

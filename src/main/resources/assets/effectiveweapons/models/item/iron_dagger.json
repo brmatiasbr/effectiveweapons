@@ -1,0 +1,21 @@
+{
+  "credit": "Made with Blockbench",
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "effectiveweapons:item/iron_dagger"
+  },
+  "display": {
+    "thirdperson_righthand": {
+      "rotation": [170.39, -86.91, 31.79],
+      "translation": [0, -9.75, 2.5]
+    },
+    "thirdperson_lefthand": {
+      "rotation": [94.53, 87.72, 48.53],
+      "translation": [0, -9.75, 1.75]
+    },
+    "head": {
+      "rotation": [0, 0, -88],
+      "translation": [-7.25, 7.25, 0.5]
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": {
+    "item": "minecraft:experience_bottle"
+  },
+  "base": {
+    "item": "effectiveweapons:iron_lance"
+  },
+  "result": {
+    "count": 1,
+    "id": "effectiveweapons:blessed_lance"
+  },
+  "template": {
+    "item": "effectiveweapons:blessed_lance_smithing_template"
+  }
+}

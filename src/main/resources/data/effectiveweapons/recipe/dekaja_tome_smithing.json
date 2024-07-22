@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": {
+    "item": "minecraft:experience_bottle"
+  },
+  "base": {
+    "item": "minecraft:book"
+  },
+  "result": {
+    "count": 1,
+    "id": "effectiveweapons:dekaja_tome"
+  },
+  "template": {
+    "item": "effectiveweapons:dekaja_tome_smithing_template"
+  }
+}

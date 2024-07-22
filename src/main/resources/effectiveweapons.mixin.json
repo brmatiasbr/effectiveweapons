@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "package": "net.br_matias_br.effectiveweapons.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "HeldItemRendererAccessor",
+    "HeldItemRendererMixin",
+    "ItemRendererAccessor",
+    "ItemRendererMixin",
+    "ModelLoaderMixin",
+    "PlayerEntityModelAccessor"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

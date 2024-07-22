@@ -1,0 +1,6 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "effectiveweapons:item/blessed_lance_smithing_template"
+  }
+}

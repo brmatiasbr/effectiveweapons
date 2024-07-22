@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "RIR",
+    "BTB",
+    "RIR"
+  ],
+  "key": {
+    "B": {
+      "item": "minecraft:iron_block"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "R": {
+      "item": "minecraft:redstone_block"
+    },
+    "T": {
+      "item": "effectiveweapons:blank_iron_smithing_template"
+    }
+  },
+  "result": {
+    "id": "effectiveweapons:rogue_dagger_smithing_template"
+  }
+}
