@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    "effectiveweapons:pact_axe",
+    "effectiveweapons:spiraling_sword",
+    "effectiveweapons:blessed_lance",
+    "effectiveweapons:rogue_dagger",
+    "effectiveweapons:dekaja_tome",
+    "effectiveweapons:double_bow",
+    "effectiveweapons:iron_lance",
+    "effectiveweapons:iron_dagger"
+  ]
+}

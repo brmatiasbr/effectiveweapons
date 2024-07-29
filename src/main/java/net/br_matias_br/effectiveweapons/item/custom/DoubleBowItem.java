@@ -104,7 +104,7 @@ public class DoubleBowItem extends BowItem {
         float i = 1.0F;
 
         for (int j = 0; j < projectiles.size(); j++) {
-            ItemStack itemStack = (ItemStack)projectiles.get(j);
+            ItemStack itemStack = projectiles.get(j);
             if (!itemStack.isEmpty()) {
                 float k = h + i * (float)((j + 1) / 2) * g;
                 i = -i;
@@ -123,7 +123,7 @@ public class DoubleBowItem extends BowItem {
                         shooter.removeStatusEffect(StatusEffects.STRENGTH);
                     }
                     else shooter.damage(EffectiveWeaponsDamageSources.of(shooter.getWorld(),
-                            EffectiveWeaponsDamageSources.PACT_AXE_RECOIL_DAMAGE), shooter.getMaxHealth() * 0.249f);
+                            EffectiveWeaponsDamageSources.DOUBLE_BOW_RECOIL_DAMAGE), shooter.getMaxHealth() * 0.249f);
                 }
                 ProjectileEntity projectileEntity = new FixedDamageArrowEntity(world, shooter, stack, itemStack, critical, 3 + shooter.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE) + bonus);
                 this.shoot(shooter, projectileEntity, j, speed * 2, divergence, k, target);

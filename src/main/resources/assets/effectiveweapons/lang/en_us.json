@@ -19,6 +19,7 @@
   "itemgroup.effectiveweapons": "Effective Weapons",
 
   "death.attack.pact_axe_recoil_damage": "%1$s paid the price of the pact",
+  "death.attack.double_bow_recoil_damage": "%1$s suffered the recoil of pulling a bow too much",
 
   "tooltip.cooldown_info": "Hold §eSHIFT§r to show cooldown info",
   "tooltip.more_info": "Hold §eCONTROL§r to show more information",

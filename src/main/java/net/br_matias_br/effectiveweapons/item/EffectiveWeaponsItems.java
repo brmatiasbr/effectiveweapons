@@ -30,9 +30,9 @@ public class EffectiveWeaponsItems {
     public static final Item PACT_AXE = registerItem("pact_axe",
             new PactAxeItem(EffectiveWeaponMaterial.INSTANCE, new Item.Settings().attributeModifiers(AxeItem.createAttributeModifiers(EffectiveWeaponMaterial.INSTANCE, 3f, -2.9f)).rarity(Rarity.RARE)));
     public static final Item DEKAJA_TOME_SMITHING_TEMPLATE = registerItem("dekaja_tome_smithing_template", new CustomSmithingTemplate(new Item.Settings(), CustomSmithingTemplate.CustomSmithingTemplateType.DEKAJA_TOME));
-    public static final Item DEKAJA_TOME = registerItem("dekaja_tome", new DekajaTomeItem(new Item.Settings().rarity(Rarity.RARE)));
+    public static final Item DEKAJA_TOME = registerItem("dekaja_tome", new DekajaTomeItem(new Item.Settings().maxCount(1).rarity(Rarity.RARE)));
     public static final Item DOUBLE_BOW_SMITHING_TEMPLATE = registerItem("double_bow_smithing_template", new CustomSmithingTemplate(new Item.Settings(), CustomSmithingTemplate.CustomSmithingTemplateType.DOUBLE_BOW));
-    public static final Item DOUBLE_BOW = registerItem("double_bow", new DoubleBowItem(new Item.Settings().rarity(Rarity.RARE)));
+    public static final Item DOUBLE_BOW = registerItem("double_bow", new DoubleBowItem(new Item.Settings().maxCount(1).rarity(Rarity.RARE)));
     public static final Item LAPIS_CIRCLET = registerItem("lapis_circlet", new CircletArmorItem(EffectiveArmorMaterials.CIRCLET, ArmorItem.Type.HELMET , new Item.Settings().maxCount(1).rarity(Rarity.RARE).equipmentSlot(((entity, stack) -> stack.getDamage() > 0 ? EquipmentSlot.FEET : EquipmentSlot.HEAD)).maxDamage(1001)));
 
 
