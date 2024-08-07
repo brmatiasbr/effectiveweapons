@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "effectiveweapons:close_shield",
+    "effectiveweapons:distant_shield"
+  ]
+}

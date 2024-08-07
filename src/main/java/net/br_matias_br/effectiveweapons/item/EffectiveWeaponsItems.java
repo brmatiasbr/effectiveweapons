@@ -33,7 +33,12 @@ public class EffectiveWeaponsItems {
     public static final Item DEKAJA_TOME = registerItem("dekaja_tome", new DekajaTomeItem(new Item.Settings().maxCount(1).rarity(Rarity.RARE)));
     public static final Item DOUBLE_BOW_SMITHING_TEMPLATE = registerItem("double_bow_smithing_template", new CustomSmithingTemplate(new Item.Settings(), CustomSmithingTemplate.CustomSmithingTemplateType.DOUBLE_BOW));
     public static final Item DOUBLE_BOW = registerItem("double_bow", new DoubleBowItem(new Item.Settings().maxCount(1).rarity(Rarity.RARE)));
+    public static final Item CLOSE_SHIELD_SMITHING_TEMPLATE = registerItem("close_shield_smithing_template", new CustomSmithingTemplate(new Item.Settings(), CustomSmithingTemplate.CustomSmithingTemplateType.CLOSE_SHIELD));
+    public static final Item CLOSE_SHIELD = registerItem("close_shield", new LightShieldItem(new Item.Settings().maxCount(1).rarity(Rarity.RARE).maxDamage(1001), true));
+    public static final Item DISTANT_SHIELD_SMITHING_TEMPLATE = registerItem("distant_shield_smithing_template", new CustomSmithingTemplate(new Item.Settings(), CustomSmithingTemplate.CustomSmithingTemplateType.DISTANT_SHIELD));
+    public static final Item DISTANT_SHIELD = registerItem("distant_shield", new LightShieldItem(new Item.Settings().maxCount(1).rarity(Rarity.RARE).maxDamage(1001), false));
     public static final Item LAPIS_CIRCLET = registerItem("lapis_circlet", new CircletArmorItem(EffectiveArmorMaterials.CIRCLET, ArmorItem.Type.HELMET , new Item.Settings().maxCount(1).rarity(Rarity.RARE).equipmentSlot(((entity, stack) -> stack.getDamage() > 0 ? EquipmentSlot.FEET : EquipmentSlot.HEAD)).maxDamage(1001)));
+    public static final Item CRUSHED_NETHERRACK = registerItem("crushed_netherrack", new Item(new Item.Settings()));
 
 
     private static Item registerItem(String name, Item item) {

@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "food",
+  "ingredients": [
+    {
+      "item": "minecraft:netherrack"
+    }
+  ],
+  "result": {
+    "id": "effectiveweapons:crushed_netherrack",
+    "count": 3
+  }
+}

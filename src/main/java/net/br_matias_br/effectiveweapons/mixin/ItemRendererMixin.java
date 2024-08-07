@@ -15,7 +15,8 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 @Mixin(ItemRenderer.class)
 public class ItemRendererMixin {
     @ModifyVariable(method = "renderItem", at = @At(value = "HEAD"), argsOnly = true)
-    public BakedModel useIronLanceModel(BakedModel value, ItemStack stack, ModelTransformationMode renderMode, boolean leftHanded, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
+    public BakedModel useCustomModel(BakedModel value, ItemStack stack, ModelTransformationMode renderMode,
+                                        boolean leftHanded, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
         if(stack.isOf(EffectiveWeaponsItems.IRON_LANCE) && EffectiveWeaponsModels.notItemGUIorFrame(renderMode)) {
             return ((ItemRendererAccessor)this).effweap$getModels().getModelManager().getModel(EffectiveWeaponsModels.IRON_LANCE_MODEL);
         }

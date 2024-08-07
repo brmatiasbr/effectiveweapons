@@ -1,6 +1,7 @@
 package net.br_matias_br.effectiveweapons.item;
 
 import net.br_matias_br.effectiveweapons.EffectiveWeapons;
+import net.br_matias_br.effectiveweapons.block.EffectiveWeaponsBlocks;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -14,6 +15,7 @@ public class EffectiveWeaponsItemGroup {
             Identifier.of(EffectiveWeapons.MOD_ID, "effectiveweapons"),
             FabricItemGroup.builder().displayName(Text.translatable("itemgroup.effectiveweapons"))
                     .icon(() -> new ItemStack(EffectiveWeaponsItems.SPIRALING_SWORD)).entries((displayContext, entries) -> {
+                        entries.add(EffectiveWeaponsBlocks.ATTUNING_TABLE);
                         entries.add(EffectiveWeaponsItems.BLANK_IRON_SMITHING_TEMPLATE);
                         entries.add(EffectiveWeaponsItems.SPIRALING_SWORD_SMITHING_TEMPLATE);
                         entries.add(EffectiveWeaponsItems.SPIRALING_SWORD);
@@ -29,7 +31,12 @@ public class EffectiveWeaponsItemGroup {
                         entries.add(EffectiveWeaponsItems.PACT_AXE);
                         entries.add(EffectiveWeaponsItems.DOUBLE_BOW_SMITHING_TEMPLATE);
                         entries.add(EffectiveWeaponsItems.DOUBLE_BOW);
+                        entries.add(EffectiveWeaponsItems.CLOSE_SHIELD_SMITHING_TEMPLATE);
+                        entries.add(EffectiveWeaponsItems.CLOSE_SHIELD);
+                        entries.add(EffectiveWeaponsItems.DISTANT_SHIELD_SMITHING_TEMPLATE);
+                        entries.add(EffectiveWeaponsItems.DISTANT_SHIELD);
                         entries.add(EffectiveWeaponsItems.LAPIS_CIRCLET);
+                        entries.add(EffectiveWeaponsItems.CRUSHED_NETHERRACK);
                     }).build());
 
     public static void registerItemGroups(){

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": {
+    "item": "minecraft:experience_bottle"
+  },
+  "base": {
+    "item": "minecraft:shield"
+  },
+  "result": {
+    "count": 1,
+    "id": "effectiveweapons:distant_shield"
+  },
+  "template": {
+    "item": "effectiveweapons:distant_shield_smithing_template"
+  }
+}

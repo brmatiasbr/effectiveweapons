@@ -1,6 +1,7 @@
 package net.br_matias_br.effectiveweapons.item.custom;
 
 import net.br_matias_br.effectiveweapons.entity.EffectiveWeaponsDamageSources;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -15,7 +16,9 @@ import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
+import net.minecraft.world.World;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -66,8 +69,11 @@ public class PactAxeItem extends AxeItem {
     }
 
     @Override
-    public void postDamageEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        return;
+    public void postDamageEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {}
+
+    @Override
+    public boolean postMine(ItemStack stack, World world, BlockState state, BlockPos pos, LivingEntity miner) {
+        return false;
     }
 
     @Override

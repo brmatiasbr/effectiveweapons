@@ -1,0 +1,14 @@
+{
+  "replace": false,
+  "values": [
+    "effectiveweapons:blank_iron_smithing_template",
+    "effectiveweapons:spiraling_sword_smithing_template",
+    "effectiveweapons:rogue_dagger_smithing_template",
+    "effectiveweapons:blessed_lance_smithing_template",
+    "effectiveweapons:pact_axe_smithing_template",
+    "effectiveweapons:dekaja_tome_smithing_template",
+    "effectiveweapons:double_bow_smithing_template",
+    "effectiveweapons:close_shield_smithing_template",
+    "effectiveweapons:distant_shield_smithing_template"
+  ]
+}

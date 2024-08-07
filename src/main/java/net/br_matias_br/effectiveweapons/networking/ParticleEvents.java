@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 public class ParticleEvents {
     public static void particleEvent(ClientWorld world, int eventType, @Nullable Entity entity, double x, double y, double z){
         if(entity == null){
-            if(eventType == 1 || eventType == 2 || eventType == 3 || eventType == 4 || eventType == 5){
+            if(eventType >= 1 && eventType < 7){
                 eventType = 0;
             }
         }
@@ -24,6 +24,8 @@ public class ParticleEvents {
             case 4: entityHealed(world, entity);
                 break;
             case 5: arrowCritical(world, entity);
+                break;
+            case 6: fireGuardActivation(world, entity);
                 break;
             default: return;
         }
@@ -117,6 +119,19 @@ public class ParticleEvents {
                     i * (0.1 + (0.05 * world.getRandom().nextDouble())) * -Math.sin(yawRadian),
                     i * (0.1 + (0.05 * world.getRandom().nextDouble())) * Math.sin(pitchRadian - Math.PI),
                     i * (0.1 + (0.05 * world.getRandom().nextDouble())) * Math.cos(yawRadian));
+        }
+
+    }
+
+    private static void fireGuardActivation(ClientWorld world, Entity entity){
+        double entityX = entity.getX(), entityY = entity.getY(), entityZ = entity.getZ();
+
+        for(int i = 0; i <= 36; i ++){
+            world.addParticle(ParticleTypes.SMALL_FLAME,
+                    entityX, entityY, entityZ,
+                    (0.2) * -Math.sin((world.getRandom().nextDouble() * 360) - 180),
+                    0,
+                    (0.2) * Math.cos((world.getRandom().nextDouble() * 360) - 180));
         }
 
     }

@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "particle": "effectiveweapons:block/attuning_table_top",
+    "up": "effectiveweapons:block/attuning_table_top",
+    "down": "effectiveweapons:block/attuning_table_bottom",
+    "north": "effectiveweapons:block/attuning_table_side_ns",
+    "south": "effectiveweapons:block/attuning_table_side_ns",
+    "east": "effectiveweapons:block/attuning_table_side_ew",
+    "west": "effectiveweapons:block/attuning_table_side_ew"
+  }
+}

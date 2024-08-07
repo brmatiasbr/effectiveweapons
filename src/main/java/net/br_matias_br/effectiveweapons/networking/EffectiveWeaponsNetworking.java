@@ -3,16 +3,19 @@ package net.br_matias_br.effectiveweapons.networking;
 import net.br_matias_br.effectiveweapons.EffectiveWeapons;
 import net.br_matias_br.effectiveweapons.entity.custom.AreaNoEffectCloudEntity;
 import net.br_matias_br.effectiveweapons.entity.custom.DekajaEffectEntity;
+import net.br_matias_br.effectiveweapons.screen.AttuningTableScreenHandler;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
+import net.minecraft.screen.ScreenHandler;
 import net.minecraft.util.Identifier;
 
 public class EffectiveWeaponsNetworking {
     public static final Identifier PARTICLE_REQUEST_PACKET_ID = Identifier.of(EffectiveWeapons.MOD_ID, "particle_request");
     public static final Identifier ENTITY_SYNC_PACKET_ID = Identifier.of(EffectiveWeapons.MOD_ID, "entity_sync");
+    public static final Identifier ITEM_MODIFICATION_PACKET_ID = Identifier.of(EffectiveWeapons.MOD_ID, "item_modification");
 
     public static void registerClientReceivers(){
         ClientPlayNetworking.registerGlobalReceiver(ParticleRequestPayload.ID, (payload, context) -> {
@@ -71,11 +74,24 @@ public class EffectiveWeaponsNetworking {
                 }
             });
         });
+
+        ServerPlayNetworking.registerGlobalReceiver(ItemModificationPayload.ID, (payload, context) -> {
+            context.server().execute(() ->{
+                ScreenHandler screenHandler = context.player().currentScreenHandler;
+                if(screenHandler instanceof AttuningTableScreenHandler attuningTableScreenHandler){
+                    if(!payload.revertToDefault()) {
+                        attuningTableScreenHandler.writeCustomization(payload.componentKey());
+                    }
+                    else attuningTableScreenHandler.revertItemToDefault();
+                }
+            });
+        });
     }
 
     public static void registerCustomPayloads(){
         PayloadTypeRegistry.playS2C().register(ParticleRequestPayload.ID, ParticleRequestPayload.CODEC);
         PayloadTypeRegistry.playS2C().register(EntitySynchronizationPayload.ID, EntitySynchronizationPayload.CODEC);
         PayloadTypeRegistry.playC2S().register(EntitySynchronizationPayload.ID, EntitySynchronizationPayload.CODEC);
+        PayloadTypeRegistry.playC2S().register(ItemModificationPayload.ID, ItemModificationPayload.CODEC);
     }
 }

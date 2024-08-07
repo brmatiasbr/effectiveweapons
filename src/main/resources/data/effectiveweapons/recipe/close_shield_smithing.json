@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": {
+    "item": "minecraft:experience_bottle"
+  },
+  "base": {
+    "item": "minecraft:shield"
+  },
+  "result": {
+    "count": 1,
+    "id": "effectiveweapons:close_shield"
+  },
+  "template": {
+    "item": "effectiveweapons:close_shield_smithing_template"
+  }
+}

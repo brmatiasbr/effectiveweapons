@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "RGR",
+    "GTG",
+    "RGR"
+  ],
+  "key": {
+    "G": {
+      "item": "minecraft:gold_ingot"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "T": {
+      "item": "effectiveweapons:blank_iron_smithing_template"
+    }
+  },
+  "result": {
+    "id": "effectiveweapons:close_shield_smithing_template"
+  }
+}

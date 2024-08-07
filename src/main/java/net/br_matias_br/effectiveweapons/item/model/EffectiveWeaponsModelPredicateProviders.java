@@ -30,5 +30,13 @@ public class EffectiveWeaponsModelPredicateProviders {
             }
             return (itemStack.getMaxUseTime(livingEntity) - livingEntity.getItemUseTimeLeft()) / 20.0F >= 2.0 ? 1.0f : 0.0f;
         });
+
+        ModelPredicateProviderRegistry.register(EffectiveWeaponsItems.CLOSE_SHIELD, Identifier.ofVanilla("blocking"),
+                (itemStack, clientWorld, livingEntity, seed) -> livingEntity != null &&
+                        livingEntity.isUsingItem() && livingEntity.getActiveItem() == itemStack ? 1.0F : 0.0F);
+
+        ModelPredicateProviderRegistry.register(EffectiveWeaponsItems.DISTANT_SHIELD, Identifier.ofVanilla("blocking"),
+                (itemStack, clientWorld, livingEntity, seed) -> livingEntity != null &&
+                        livingEntity.isUsingItem() && livingEntity.getActiveItem() == itemStack ? 1.0F : 0.0F);
     }
 }

@@ -63,6 +63,14 @@ public class CustomSmithingTemplate extends Item {
                 titleText = Text.translatable("tooltip.double_bow_smithing_template_title").formatted(TITLE_FORMATTING);
                 appliesToText = Text.translatable("item.minecraft.bow").formatted(DESCRIPTION_FORMATTING);
             }
+            case CLOSE_SHIELD -> {
+                titleText = Text.translatable("tooltip.close_shield_smithing_template_title").formatted(TITLE_FORMATTING);
+                appliesToText = Text.translatable("item.minecraft.shield").formatted(DESCRIPTION_FORMATTING);
+            }
+            case DISTANT_SHIELD -> {
+                titleText = Text.translatable("tooltip.distant_shield_smithing_template_title").formatted(TITLE_FORMATTING);
+                appliesToText = Text.translatable("item.minecraft.shield").formatted(DESCRIPTION_FORMATTING);
+            }
             case IRON -> {
                 titleText = Text.translatable("tooltip.iron_smithing_template_title").formatted(TITLE_FORMATTING);
                 appliesToText = Text.translatable("tooltip.iron_smithing_template_applies_to").formatted(DESCRIPTION_FORMATTING);
@@ -78,13 +86,15 @@ public class CustomSmithingTemplate extends Item {
         tooltip.add(ScreenTexts.space().append(ingredientsText));
     }
 
-    public static enum CustomSmithingTemplateType{
+    public enum CustomSmithingTemplateType{
         IRON,
         SPIRALING_SWORD,
         ROGUE_DAGGER,
         BLESSED_LANCE,
         PACT_AXE,
         DEKAJA_TOME,
-        DOUBLE_BOW
+        DOUBLE_BOW,
+        CLOSE_SHIELD,
+        DISTANT_SHIELD
     }
 }

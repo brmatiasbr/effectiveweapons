@@ -3,6 +3,8 @@
   "package": "net.br_matias_br.effectiveweapons.mixin",
   "compatibilityLevel": "JAVA_21",
   "client": [
+    "BipedEntityModelMixin",
+    "ClientPlayerEntityMixin",
     "HeldItemRendererAccessor",
     "HeldItemRendererMixin",
     "ItemRendererAccessor",
@@ -12,5 +14,8 @@
   ],
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "mixins": [
+    "LivingEntityMixin"
+  ]
 }

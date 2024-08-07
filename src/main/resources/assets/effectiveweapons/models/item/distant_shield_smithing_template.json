@@ -1,0 +1,6 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "effectiveweapons:item/distant_shield_smithing_template"
+  }
+}
