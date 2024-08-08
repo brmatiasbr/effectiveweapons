@@ -98,7 +98,6 @@ public class DekajaEffectEntity extends ProjectileEntity {
     @Override
     protected void onBlockCollision(BlockState state) {
         if(state.isSolidBlock(this.getWorld(), new BlockPos((int) this.getX(), (int) this.getY(), (int) this.getZ()))){
-            System.out.println("block collision result: " + state.getBlock().getName().toString());
             this.trigger(100, false);
         }
     }

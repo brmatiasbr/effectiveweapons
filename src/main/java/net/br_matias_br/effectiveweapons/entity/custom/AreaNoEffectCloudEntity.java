@@ -100,7 +100,6 @@ public class AreaNoEffectCloudEntity extends Entity {
 
                     if(!statusesToNeutralize.isEmpty()) for(StatusEffectInstance statusEffect : statusesToNeutralize){
                         if(statusEffect.getDuration() > this.highestDuration) this.highestDuration = statusEffect.getDuration();
-                        System.out.println("Removed " + statusEffect.getEffectType().value().getName().toString() + " from " + entity.getName().toString() + ", owner: " + this.owner.getName().toString());
                         entity.removeStatusEffect(statusEffect.getEffectType());
                     }
                 }

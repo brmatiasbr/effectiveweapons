@@ -41,7 +41,6 @@ public class EffectiveWeaponsNetworking {
                     }
                 }
                 if(entity1 instanceof AreaNoEffectCloudEntity areaNoEffectCloud){
-                    System.out.println("Client received payload, information2 = " + payload.information2() + ", type = " + payload.type());
                     if(payload.type() == 0){
                         areaNoEffectCloud.setDuration((int) payload.information2() - 1);
                     }

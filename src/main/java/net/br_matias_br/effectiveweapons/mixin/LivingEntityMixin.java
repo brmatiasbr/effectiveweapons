@@ -99,7 +99,6 @@ public abstract class LivingEntityMixin extends Entity {
     @ModifyVariable(method = "damage(Lnet/minecraft/entity/damage/DamageSource;F)Z", at = @At(value = "HEAD"), argsOnly = true)
     public float applyFireGuardDamageReduction(float amount, DamageSource source){
         if(this.hasStatusEffect(EffectiveWeapons.FIRE_GUARD_REGISTRY_ENTRY) && source.isIn(DamageTypeTags.IS_FIRE)){
-            System.out.println(amount * 0.6f);
             return amount * 0.6f;
         }
             return amount;

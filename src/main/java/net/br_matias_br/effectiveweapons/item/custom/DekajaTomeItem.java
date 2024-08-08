@@ -32,7 +32,6 @@ public class DekajaTomeItem extends Item {
     }
     @Override
     public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
-        System.out.println("onStoppedUsing, remainingUseTicks: " + remainingUseTicks);
         if (user instanceof PlayerEntity playerEntity) {
             int i = this.getMaxUseTime(stack, user) - remainingUseTicks;
             float f = getPullProgress(i);
