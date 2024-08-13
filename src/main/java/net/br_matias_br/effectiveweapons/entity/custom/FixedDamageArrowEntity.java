@@ -64,6 +64,27 @@ public class FixedDamageArrowEntity extends PersistentProjectileEntity {
         if(bl && this.isCritical()){
             damageSource = this.getDamageSources().magic();
         }
+
+        if(entity instanceof PlayerEntity player){
+            if(d > player.getMaxHealth() * 0.8){
+                float overkill = (float) (d - player.getMaxHealth() * 0.8f);
+                d = player.getMaxHealth() * 0.8;
+
+                for(int i = 0; i < 10; i++){
+                    if(overkill > 10){
+                        player.setAir(player.getAir() - 1);
+                        overkill -= 10;
+                    }
+                }
+                for(int i = 0; i < 20; i++){
+                    if(overkill > 100){
+                        player.getHungerManager().setFoodLevel(player.getHungerManager().getFoodLevel() - 1);
+                        overkill -= 100;
+                    }
+                }
+            }
+        }
+
         if (entity.damage(damageSource, (float) d)) {
             if(this.isCritical() && !this.getWorld().isClient()){
                 for(ServerPlayerEntity player : PlayerLookup.around((ServerWorld) this.getWorld(),

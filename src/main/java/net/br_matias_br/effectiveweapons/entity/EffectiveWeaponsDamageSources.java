@@ -15,6 +15,9 @@ public class EffectiveWeaponsDamageSources {
     public static final RegistryKey<DamageType> DOUBLE_BOW_RECOIL_DAMAGE = RegistryKey.of(
             RegistryKeys.DAMAGE_TYPE,Identifier.of(EffectiveWeapons.MOD_ID, "double_bow_recoil_damage"));
 
+    public static final RegistryKey<DamageType> ELEVATED_RECOIL_DAMAGE = RegistryKey.of(
+            RegistryKeys.DAMAGE_TYPE,Identifier.of(EffectiveWeapons.MOD_ID, "elevated_recoil_damage"));
+
     public static DamageSource of(World world, RegistryKey<DamageType> key) {
         return new DamageSource(world.getRegistryManager().get(RegistryKeys.DAMAGE_TYPE).entryOf(key));
     }

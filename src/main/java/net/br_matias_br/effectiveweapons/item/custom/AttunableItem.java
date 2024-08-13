@@ -13,11 +13,10 @@ public interface AttunableItem {
     public ArrayList<String> getPossibleAttunedCustomizations();
     public ArrayList<String> getPossibleAttunedPassiveCustomizations();
     public ArrayList<String> getPossibleAttunedMeterCustomizations();
-    public RegistryEntry<EntityAttribute> getAttributeOf(String key);
-    public EntityAttributeModifier getAttributeValueOf(String key);
     public AttributeModifiersComponent getDefaultAttributeModifiers();
     public NbtCompound getCompoundOrDefault(ItemStack stack);
     public String getDefaultPassiveCustomization();
     public String getDefaultMeterCustomization();
+    public String getItemChargeId();
     public int getDefaultDurabilityDamage();
 }

@@ -6,7 +6,9 @@
   "description": "Simple Minecraft mod revolving around weapons and status effects",
   "authors": ["br_matias_br"],
   "contact": {
-    "repo": "https://github.com/brmatiasbr/effectiveweapons/tree/master"
+    "homepage": "https://modrinth.com/mod/effective-weapons",
+    "sources": "https://github.com/brmatiasbr/effectiveweapons/tree/master",
+    "issues": "https://github.com/brmatiasbr/effectiveweapons/issues"
   },
   "license": "MIT",
   "icon": "assets/effectiveweapons/icon.png",
@@ -22,7 +24,10 @@
   "depends": {
     "fabricloader": ">=0.15.11",
     "fabric": "*",
-    "minecraft": "1.21"
+    "minecraft": [
+      "1.21",
+      "1.21.1"
+    ]
   },
   "mixins": [
     "effectiveweapons.mixin.json"

@@ -200,21 +200,19 @@ public class AttuningTableScreenHandler extends ScreenHandler {
 
                 compound.putString(EffectiveWeapons.PASSIVE_ABILITY, componentKey);
 
-                RegistryEntry<EntityAttribute> attribute = attunableItem.getAttributeOf(componentKey);
-                EntityAttributeModifier modifier = attunableItem.getAttributeValueOf(componentKey);
+                RegistryEntry<EntityAttribute> attribute = EffectiveWeapons.getAttributeOf(componentKey);
+                EntityAttributeModifier modifier = EffectiveWeapons.getAttributeValueOf(componentKey);
 
                 if(attribute != null && modifier != null){
-
-                    AttributeModifiersComponent attributeModifiersComponent = stack.getOrDefault(DataComponentTypes.ATTRIBUTE_MODIFIERS,
-                            attunableItem.getDefaultAttributeModifiers());
-                    attributeModifiersComponent = attributeModifiersComponent.with(attribute, modifier, AttributeModifierSlot.HAND);
-                    stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, attributeModifiersComponent);
+                    stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, EffectiveWeapons.getAttributeModifiersOf(componentKey, stack, attunableItem));
                 }
             }
             else if(componentKey.contains("meter")){
-                compound.putInt(LightShieldItem.CURRENT_CHARGE, 0);
-                stack.setDamage(1001);
                 compound.putString(EffectiveWeapons.METER_ABILITY, componentKey);
+            }
+            if(!compound.getString(EffectiveWeapons.METER_ABILITY).equals(EffectiveWeapons.METER_NONE)){
+                compound.putInt(attunableItem.getItemChargeId(), 0);
+                stack.setDamage(1001);
             }
 
             NbtComponent component = NbtComponent.of(compound);
@@ -236,11 +234,13 @@ public class AttuningTableScreenHandler extends ScreenHandler {
             compound.putString(EffectiveWeapons.PASSIVE_ABILITY, attunableItem.getDefaultPassiveCustomization());
             compound.putString(EffectiveWeapons.METER_ABILITY, attunableItem.getDefaultMeterCustomization());
 
-            compound.putInt(LightShieldItem.CURRENT_CHARGE, 0);
+            compound.putInt(attunableItem.getItemChargeId(), 0);
             stack.setDamage(attunableItem.getDefaultDurabilityDamage());
 
             NbtComponent component = NbtComponent.of(compound);
             stack.set(DataComponentTypes.CUSTOM_DATA, component);
+
+            stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, attunableItem.getDefaultAttributeModifiers());
         });
     }
 

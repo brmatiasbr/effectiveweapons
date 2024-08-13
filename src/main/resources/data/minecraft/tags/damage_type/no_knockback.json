@@ -2,6 +2,7 @@
   "replace": false,
   "values": [
     "effectiveweapons:pact_axe_recoil_damage",
-    "effectiveweapons:double_bow_recoil_damage"
+    "effectiveweapons:double_bow_recoil_damage",
+    "effectiveweapons:elevated_recoil_damage"
   ]
 }

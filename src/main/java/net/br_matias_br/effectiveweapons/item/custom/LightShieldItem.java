@@ -8,16 +8,12 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.AttributeModifiersComponent;
 import net.minecraft.component.type.NbtComponent;
-import net.minecraft.entity.attribute.EntityAttribute;
-import net.minecraft.entity.attribute.EntityAttributeModifier;
-import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ShieldItem;
 import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
@@ -25,7 +21,6 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -39,9 +34,6 @@ public class LightShieldItem extends ShieldItem implements AttunableItem{
         this.near = near;
     }
     private boolean near = false;
-    public static final String PASSIVE_FEATHERWEIGHT = "effectiveweapons:passive_featherweight";
-    public static final String PASSIVE_STRIDE = "effectiveweapons:passive_stride";
-    public static final String PASSIVE_LUCKY = "effectiveweapons:passive_lucky";
     public static final String METER_FIRE_GUARD = "effectiveweapons:meter_fire_guard";
     public static final String METER_LUNGE = "effectiveweapons:meter_lunge";
     public static final String METER_STAGGER = "effectiveweapons:meter_stagger";
@@ -111,8 +103,8 @@ public class LightShieldItem extends ShieldItem implements AttunableItem{
             tooltip.add(Text.translatable("tooltip.light_shield_cont").formatted(Formatting.ITALIC).formatted(Formatting.BLUE));
             tooltip.add(Text.translatable(near ? "tooltip.close_shield" : "tooltip.distant_shield").formatted(Formatting.ITALIC).formatted(Formatting.BLUE));
             this.buildCustomizationTooltip(tooltip, passiveAbility, meterAbility);
-            tooltip.add(Text.translatable(meterAbility.equals(METER_STAGGER) ? "tooltip.light_shield_auto_meter" : "tooltip.light_shield_use_meter").formatted(Formatting.ITALIC).formatted(Formatting.DARK_PURPLE));
-            tooltip.add(Text.translatable("tooltip.light_shield_attuned_customization").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
+            tooltip.add(Text.translatable(meterAbility.equals(METER_STAGGER) ? "tooltip.auto_meter" : "tooltip.sneak_meter").formatted(Formatting.ITALIC).formatted(Formatting.DARK_PURPLE));
+            tooltip.add(Text.translatable("tooltip.attuned_customization_enabled").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
         }
         else{
             tooltip.add(Text.translatable("tooltip.light_shield_summary").formatted(Formatting.ITALIC).formatted(Formatting.BLUE));
@@ -123,8 +115,8 @@ public class LightShieldItem extends ShieldItem implements AttunableItem{
     }
 
     private void buildCustomizationTooltip(List<Text> tooltip, String passive, String meter){
-        String passiveTranslationKey = passive.replace("effectiveweapons:", "tooltip.light_shield_");
-        String meterTranslationKey = meter.replace("effectiveweapons:", "tooltip.light_shield_");
+        String passiveTranslationKey = passive.replace("effectiveweapons:", "tooltip.");
+        String meterTranslationKey = meter.replace("effectiveweapons:", "tooltip.");
 
         tooltip.add(Text.translatable(passiveTranslationKey).formatted(Formatting.ITALIC).formatted(Formatting.LIGHT_PURPLE));
         tooltip.add(Text.translatable(meterTranslationKey).formatted(Formatting.ITALIC).formatted(Formatting.DARK_PURPLE));
@@ -163,6 +155,11 @@ public class LightShieldItem extends ShieldItem implements AttunableItem{
     }
 
     @Override
+    public String getItemChargeId() {
+        return CURRENT_CHARGE;
+    }
+
+    @Override
     public int getDefaultDurabilityDamage() {
         return 0;
     }
@@ -170,9 +167,9 @@ public class LightShieldItem extends ShieldItem implements AttunableItem{
     @Override
     public ArrayList<String> getPossibleAttunedCustomizations() {
         ArrayList<String> customizations = new ArrayList<>();
-        customizations.add(PASSIVE_FEATHERWEIGHT);
-        customizations.add(PASSIVE_STRIDE);
-        customizations.add(PASSIVE_LUCKY);
+        customizations.add(EffectiveWeapons.PASSIVE_FEATHERWEIGHT);
+        customizations.add(EffectiveWeapons.PASSIVE_STRIDE);
+        customizations.add(EffectiveWeapons.PASSIVE_LUCKY);
         customizations.add(METER_FIRE_GUARD);
         customizations.add(METER_LUNGE);
         customizations.add(METER_STAGGER);
@@ -182,9 +179,9 @@ public class LightShieldItem extends ShieldItem implements AttunableItem{
     @Override
     public ArrayList<String> getPossibleAttunedPassiveCustomizations() {
         ArrayList<String> customizations = new ArrayList<>();
-        customizations.add(PASSIVE_FEATHERWEIGHT);
-        customizations.add(PASSIVE_STRIDE);
-        customizations.add(PASSIVE_LUCKY);
+        customizations.add(EffectiveWeapons.PASSIVE_FEATHERWEIGHT);
+        customizations.add(EffectiveWeapons.PASSIVE_STRIDE);
+        customizations.add(EffectiveWeapons.PASSIVE_LUCKY);
         return customizations;
     }
 
@@ -195,29 +192,6 @@ public class LightShieldItem extends ShieldItem implements AttunableItem{
         customizations.add(METER_LUNGE);
         customizations.add(METER_STAGGER);
         return customizations;
-    }
-
-    @Override
-    public RegistryEntry<EntityAttribute> getAttributeOf(String key) {
-        return switch (key) {
-            case PASSIVE_FEATHERWEIGHT -> EntityAttributes.GENERIC_SAFE_FALL_DISTANCE;
-            case PASSIVE_STRIDE -> EntityAttributes.GENERIC_STEP_HEIGHT;
-            case PASSIVE_LUCKY -> EntityAttributes.GENERIC_LUCK;
-            default -> null;
-        };
-    }
-
-    @Override
-    public EntityAttributeModifier getAttributeValueOf(String key) {
-        return switch (key) {
-            case PASSIVE_FEATHERWEIGHT -> new EntityAttributeModifier(Identifier.of(EffectiveWeapons.MOD_ID, "effectiveweapons_featherweight"),
-                    3, EntityAttributeModifier.Operation.ADD_VALUE);
-            case PASSIVE_STRIDE -> new EntityAttributeModifier(Identifier.of(EffectiveWeapons.MOD_ID, "effectiveweapons_stride"),
-                    0.4, EntityAttributeModifier.Operation.ADD_VALUE);
-            case PASSIVE_LUCKY -> new EntityAttributeModifier(Identifier.of(EffectiveWeapons.MOD_ID, "effectiveweapons_lucky"),
-                    3, EntityAttributeModifier.Operation.ADD_VALUE);
-            default -> null;
-        };
     }
 
     @Override

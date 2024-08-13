@@ -1,5 +1,7 @@
 package net.br_matias_br.effectiveweapons.item.custom;
 
+import net.br_matias_br.effectiveweapons.EffectiveWeapons;
+import net.br_matias_br.effectiveweapons.item.material.EffectiveWeaponMaterial;
 import net.br_matias_br.effectiveweapons.networking.ParticleRequestPayload;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -7,6 +9,9 @@ import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.AttributeModifiersComponent;
+import net.minecraft.component.type.NbtComponent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
@@ -16,6 +21,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ToolMaterial;
 import net.minecraft.item.tooltip.TooltipType;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.tag.EntityTypeTags;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -32,14 +38,22 @@ import net.minecraft.world.World;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-public class BlessedLanceItem extends LanceItem{
+public class BlessedLanceItem extends LanceItem implements AttunableItem{
     public BlessedLanceItem(ToolMaterial material, Settings settings) {
         super(material, settings);
     }
+
+    public static final String METER_ELEVATED = "effectiveweapons:meter_elevated";
+    public static final String METER_GRAVE_KEEPER = "effectiveweapons:meter_grave_keeper";
+    public static final String METER_REFRESH = "effectiveweapons:meter_refresh";
+    public static final String CURRENT_CHARGE = "effectiveweapons:current_charge";
+    public static final int MAX_CHARGE = 200;
+    public static final int MAX_DASH_CHARGE = 30;
 
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
@@ -47,7 +61,7 @@ public class BlessedLanceItem extends LanceItem{
         int cooldown = 0;
 
         if(!statusEffects.isEmpty() && !user.getItemCooldownManager().isCoolingDown(this)){
-            cooldown = this.neutralizeEffects(user, world, user.getStackInHand(hand));
+            cooldown = neutralizeEffects(user, world, false);
         }
         if(cooldown > 0){
             user.getItemCooldownManager().set(this, Math.min(cooldown, 2400));
@@ -62,7 +76,7 @@ public class BlessedLanceItem extends LanceItem{
         int cooldown = 0;
 
         if(!statusEffects.isEmpty() && !user.getItemCooldownManager().isCoolingDown(this)){
-            cooldown = this.neutralizeEffects(entity, user.getWorld(), stack);
+            cooldown = neutralizeEffects(entity, user.getWorld(), false);
         }
         if(cooldown > 0){
             user.getItemCooldownManager().set(this, Math.min(cooldown, 2400));
@@ -71,7 +85,7 @@ public class BlessedLanceItem extends LanceItem{
         return cooldown > 0 ? ActionResult.success(true) :  super.useOnEntity(stack, user, entity, hand);
     }
 
-    private int neutralizeEffects(LivingEntity entity, World world, ItemStack stack){
+    public static int neutralizeEffects(LivingEntity entity, World world, boolean refresh){
         Collection<StatusEffectInstance> statusEffects = entity.getStatusEffects();
         LinkedList<StatusEffectInstance> effectsToClear = new LinkedList<>();
         boolean success = false;
@@ -85,12 +99,15 @@ public class BlessedLanceItem extends LanceItem{
         }
         if(!effectsToClear.isEmpty()){
             success = true;
-            for(StatusEffectInstance statusEffect : effectsToClear){
-                if (highestDuration < statusEffect.getDuration()) {
-                    highestDuration = statusEffect.getDuration();
+            if(!refresh){
+                for (StatusEffectInstance statusEffect : effectsToClear) {
+                    if (highestDuration < statusEffect.getDuration()) {
+                        highestDuration = statusEffect.getDuration();
+                    }
+                    entity.removeStatusEffect(statusEffect.getEffectType());
                 }
-                entity.removeStatusEffect(statusEffect.getEffectType());
             }
+            else entity.removeStatusEffect(effectsToClear.get(world.getRandom().nextInt(effectsToClear.size())).getEffectType());
         }
 
         if(success){
@@ -107,11 +124,63 @@ public class BlessedLanceItem extends LanceItem{
     }
 
     @Override
+    public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
+        NbtCompound compound = this.getCompoundOrDefault(stack);
+        if(compound.getString(EffectiveWeapons.METER_ABILITY).equals(METER_GRAVE_KEEPER)){
+            int charge = compound.getInt(CURRENT_CHARGE);
+            if(charge < MAX_DASH_CHARGE){
+                charge++;
+            }
+            else if(!entity.isOnGround() && entity.isSneaking()){
+                charge = 0;
+                double power = 0.75, velocityX, velocityY, velocityZ;
+                double yawRadian = Math.toRadians(entity.getYaw());
+
+                velocityY = 0.05;
+                velocityX = Math.sin(-yawRadian) * -power;
+                velocityZ = Math.cos(yawRadian) * -power;
+                Vec3d velocity = new Vec3d(velocityX, velocityY, velocityZ);
+
+                entity.setVelocity(velocity);
+                if(entity instanceof PlayerEntity player) {
+                    player.currentExplosionImpactPos = entity.getPos().add(0, -20, 0);
+                    player.setIgnoreFallDamageFromCurrentExplosion(true);
+                }
+            }
+
+            compound.putFloat(CURRENT_CHARGE, charge);
+            NbtComponent component = NbtComponent.of(compound);
+            stack.set(DataComponentTypes.CUSTOM_DATA, component);
+            stack.setDamage(1001 - (33 * charge));
+        }
+    }
+
+    @Override
+    public int getItemBarColor(ItemStack stack) {
+        NbtCompound compound = this.getCompoundOrDefault(stack);
+        String meterAbility = compound.getString(EffectiveWeapons.METER_ABILITY);
+        int color = 0x32A60C;
+        if(meterAbility.equals(METER_GRAVE_KEEPER)){
+            color = 0x575757;
+        }
+        if(meterAbility.equals(METER_ELEVATED)){
+            color = 0x94BDFF;
+        }
+        return color;
+    }
+
+    @Override
     public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
         boolean onCooldown = false;
         float cooldown = 0;
         ClientPlayerEntity player = MinecraftClient.getInstance().player;
         boolean controlHeld = Screen.hasControlDown();
+        String passiveAbility, meterAbility;
+
+        NbtCompound compound = this.getCompoundOrDefault(stack);
+
+        passiveAbility = compound.getString(EffectiveWeapons.PASSIVE_ABILITY);
+        meterAbility = compound.getString(EffectiveWeapons.METER_ABILITY);
 
         if(player != null){
             onCooldown = player.getItemCooldownManager().isCoolingDown(this);
@@ -125,13 +194,25 @@ public class BlessedLanceItem extends LanceItem{
             tooltip.add(Text.translatable("tooltip.blessed_lance_cont").formatted(Formatting.ITALIC).formatted(Formatting.DARK_GREEN));
             tooltip.add(Text.translatable("tooltip.blessed_lance_cooldown").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
             tooltip.add(Text.translatable("tooltip.blessed_lance_cooldown_cont").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
+            this.buildCustomizationTooltip(tooltip, passiveAbility, meterAbility);
+            tooltip.add(Text.translatable(meterAbility.equals(METER_GRAVE_KEEPER) ? "tooltip.sneak_air_meter" : "tooltip.auto_meter").formatted(Formatting.ITALIC).formatted(Formatting.DARK_PURPLE));
+            tooltip.add(Text.translatable("tooltip.attuned_customization_enabled").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
         }
         else{
             tooltip.add(Text.translatable("tooltip.blessed_lance_summary").formatted(Formatting.ITALIC).formatted(Formatting.DARK_GREEN));
+            this.buildCustomizationTooltip(tooltip, passiveAbility, meterAbility);
             tooltip.add(Text.translatable("tooltip.more_info").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
         }
         if(onCooldown) tooltip.add(Text.literal("Remaining cooldown: " + formatter.format(cooldown * 100) + "%").formatted(Formatting.ITALIC).formatted(Formatting.RED));
         super.appendTooltip(stack, context, tooltip, type);
+    }
+
+    private void buildCustomizationTooltip(List<Text> tooltip, String passive, String meter){
+        String passiveTranslationKey = passive.replace("effectiveweapons:", "tooltip.");
+        String meterTranslationKey = meter.replace("effectiveweapons:", "tooltip.");
+
+        tooltip.add(Text.translatable(passiveTranslationKey).formatted(Formatting.ITALIC).formatted(Formatting.LIGHT_PURPLE));
+        tooltip.add(Text.translatable(meterTranslationKey).formatted(Formatting.ITALIC).formatted(Formatting.DARK_PURPLE));
     }
 
     @Override
@@ -152,5 +233,78 @@ public class BlessedLanceItem extends LanceItem{
             stack.setDamage(0);
         }
         return false;
+    }
+
+    @Override
+    public ArrayList<String> getPossibleAttunedCustomizations() {
+        ArrayList<String> customizations = new ArrayList<>();
+        customizations.add(EffectiveWeapons.PASSIVE_FIRM);
+        customizations.add(EffectiveWeapons.PASSIVE_FEATHERWEIGHT);
+        customizations.add(EffectiveWeapons.PASSIVE_BUFFER);
+        customizations.add(METER_ELEVATED);
+        customizations.add(METER_REFRESH);
+        customizations.add(METER_GRAVE_KEEPER);
+        return customizations;
+    }
+
+    @Override
+    public ArrayList<String> getPossibleAttunedPassiveCustomizations() {
+        ArrayList<String> customizations = new ArrayList<>();
+        customizations.add(EffectiveWeapons.PASSIVE_FIRM);
+        customizations.add(EffectiveWeapons.PASSIVE_FEATHERWEIGHT);
+        customizations.add(EffectiveWeapons.PASSIVE_BUFFER);
+        return customizations;
+    }
+
+    @Override
+    public ArrayList<String> getPossibleAttunedMeterCustomizations() {
+        ArrayList<String> customizations = new ArrayList<>();
+        customizations.add(METER_ELEVATED);
+        customizations.add(METER_REFRESH);
+        customizations.add(METER_GRAVE_KEEPER);
+        return customizations;
+    }
+
+    @Override
+    public AttributeModifiersComponent getDefaultAttributeModifiers() {
+        return LanceItem.createAttributeModifiers(EffectiveWeaponMaterial.INSTANCE, 8f, -2.7f);
+    }
+
+    @Override
+    public NbtCompound getCompoundOrDefault(ItemStack stack) {
+        NbtComponent component = stack.get(DataComponentTypes.CUSTOM_DATA);
+        if(component != null){
+            return component.copyNbt();
+        }
+
+        NbtCompound compound = new NbtCompound();
+        compound.putString(EffectiveWeapons.PASSIVE_ABILITY, EffectiveWeapons.PASSIVE_NONE);
+        compound.putString(EffectiveWeapons.METER_ABILITY, EffectiveWeapons.METER_NONE);
+
+        compound.putInt(CURRENT_CHARGE, 0);
+        NbtComponent nextComponent = NbtComponent.of(compound);
+        stack.set(DataComponentTypes.CUSTOM_DATA, nextComponent);
+
+        return compound;
+    }
+
+    @Override
+    public String getDefaultPassiveCustomization() {
+        return EffectiveWeapons.PASSIVE_NONE;
+    }
+
+    @Override
+    public String getDefaultMeterCustomization() {
+        return EffectiveWeapons.METER_NONE;
+    }
+
+    @Override
+    public String getItemChargeId() {
+        return CURRENT_CHARGE;
+    }
+
+    @Override
+    public int getDefaultDurabilityDamage() {
+        return 0;
     }
 }

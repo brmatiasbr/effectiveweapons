@@ -37,7 +37,7 @@ public class LanceItem extends ToolItem {
                 .add(
                         EntityAttributes.PLAYER_ENTITY_INTERACTION_RANGE,
                         new EntityAttributeModifier(Identifier.of(EffectiveWeapons.MOD_ID, "lance_entity_range"), 1.0, EntityAttributeModifier.Operation.ADD_VALUE),
-                        AttributeModifierSlot.HAND
+                        AttributeModifierSlot.MAINHAND
                 )
                 .build();
     }
