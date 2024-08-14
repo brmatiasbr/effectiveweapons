@@ -48,7 +48,7 @@ public abstract class LivingEntityMixin extends Entity {
 
     @Inject(method = "blockedByShield(Lnet/minecraft/entity/damage/DamageSource;)Z", at = @At(value = "HEAD"), cancellable = true)
     public void cancelIfHoldingSpecialShield(DamageSource source, CallbackInfoReturnable<Boolean> cir){
-        if (this.isUsingItem() && !this.activeItemStack.isEmpty()) {
+        if (this.isUsingItem() && !this.activeItemStack.isEmpty() && this.activeItemStack.getItem() instanceof LightShieldItem) {
             boolean newValue = false;
             if(this.activeItemStack.isOf(EffectiveWeaponsItems.CLOSE_SHIELD)){
                 newValue = (!(source.getSource() instanceof LivingEntity) || source.isIn(DamageTypeTags.IS_PROJECTILE));

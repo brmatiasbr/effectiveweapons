@@ -2,19 +2,19 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "pattern": [
-    "RIR",
+    "RNR",
     "GTG",
-    "RIR"
+    "RGR"
   ],
   "key": {
     "G": {
-      "item": "minecraft:glowstone"
+      "item": "minecraft:gold_ingot"
     },
-    "I": {
-      "item": "minecraft:iron_ingot"
+    "N": {
+      "item": "minecraft:netherite_ingot"
     },
     "R": {
-      "item": "minecraft:redstone_block"
+      "item": "minecraft:redstone"
     },
     "T": {
       "item": "effectiveweapons:blank_iron_smithing_template"

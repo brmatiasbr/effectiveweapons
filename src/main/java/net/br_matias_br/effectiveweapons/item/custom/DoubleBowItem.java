@@ -37,37 +37,6 @@ public class DoubleBowItem extends BowItem {
     public static final Predicate<ItemStack> DOUBLE_BOW_PROJECTILES = stack -> stack.isOf(Items.ARROW);
 
     @Override
-    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-        int statusEffects = 0;
-        Collection<StatusEffectInstance> statusEffectsActive = user.getStatusEffects();
-        LinkedList<StatusEffectInstance> statusEffectsToClear = new LinkedList<>();
-        if(!statusEffectsActive.isEmpty()) for(StatusEffectInstance effectInstance : statusEffectsActive){
-            if(effectInstance.getEffectType().value().isBeneficial()){
-                statusEffects++;
-                statusEffectsToClear.add(effectInstance);
-            }
-        }
-
-        if(!user.isOnGround() && user.isSprinting() && statusEffects > 0){
-            double boost = statusEffects * 0.3;
-            user.setVelocity(user.getVelocity().getX(), user.getVelocity().getY() + boost, user.getVelocity().getZ());
-            for(StatusEffectInstance statusEffectInstance : statusEffectsToClear){
-                if(world.getRandom().nextBoolean()){
-                    user.removeStatusEffect(statusEffectInstance.getEffectType());
-                    if(statusEffectInstance.getAmplifier() > 0){
-                        user.addStatusEffect(
-                                new StatusEffectInstance(statusEffectInstance.getEffectType(),
-                                    statusEffectInstance.getDuration(), statusEffectInstance.getAmplifier() - 1,
-                                    statusEffectInstance.isAmbient(), statusEffectInstance.shouldShowParticles(),
-                                    statusEffectInstance.shouldShowIcon()));
-                    }
-                }
-            }
-        }
-        return super.use(world, user, hand);
-    }
-
-    @Override
     public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
         if (user instanceof PlayerEntity playerEntity) {
             ItemStack itemStack = playerEntity.getProjectileType(stack);

@@ -53,7 +53,7 @@ public class BlessedLanceItem extends LanceItem implements AttunableItem{
     public static final String METER_REFRESH = "effectiveweapons:meter_refresh";
     public static final String CURRENT_CHARGE = "effectiveweapons:current_charge";
     public static final int MAX_CHARGE = 200;
-    public static final int MAX_DASH_CHARGE = 30;
+    public static final int MAX_DASH_CHARGE = 15;
 
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
@@ -125,6 +125,9 @@ public class BlessedLanceItem extends LanceItem implements AttunableItem{
 
     @Override
     public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
+        if(!selected){
+            return;
+        }
         NbtCompound compound = this.getCompoundOrDefault(stack);
         if(compound.getString(EffectiveWeapons.METER_ABILITY).equals(METER_GRAVE_KEEPER)){
             int charge = compound.getInt(CURRENT_CHARGE);
@@ -151,7 +154,7 @@ public class BlessedLanceItem extends LanceItem implements AttunableItem{
             compound.putFloat(CURRENT_CHARGE, charge);
             NbtComponent component = NbtComponent.of(compound);
             stack.set(DataComponentTypes.CUSTOM_DATA, component);
-            stack.setDamage(1001 - (33 * charge));
+            stack.setDamage(1001 - ((1000/MAX_DASH_CHARGE) * charge));
         }
     }
 
