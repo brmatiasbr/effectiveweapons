@@ -7,7 +7,9 @@ import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -34,16 +36,15 @@ public class RogueDaggerItem extends DaggerItem{
 
     @Override
     public boolean postHit(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        float yawDifference = Math.abs(Math.abs(target.getYaw()) - Math.abs(attacker.getYaw()));
-        boolean backStab = false;
+        float yawDifference = Math.abs(target.getHeadYaw() - attacker.getYaw());
         boolean positiveSteal = false;
         boolean success = false;
         boolean canSteal = true;
         int highestDuration = 0;
+        if(yawDifference > 180) yawDifference = 360 - yawDifference;
 
         if(yawDifference < 40 || (yawDifference < 95 && attacker.isSneaking())){
             positiveSteal = true;
-            if(yawDifference < 40) backStab = true;
         }
 
         Collection<StatusEffectInstance> effectsToSteal = target.getStatusEffects();
@@ -82,9 +83,17 @@ public class RogueDaggerItem extends DaggerItem{
                 player.getItemCooldownManager().set(this, Math.min(cooldown, 3600));
             }
         }
-        if(backStab) target.damage(target.getDamageSources().mobAttack(attacker), 2f);
 
         return super.postHit(stack, target, attacker);
+    }
+
+    @Override
+    public float getBonusAttackDamage(Entity target, float baseAttackDamage, DamageSource damageSource) {
+        if(damageSource.getSource() instanceof LivingEntity attacker){
+            float yawDifference = Math.abs(target.getHeadYaw() - attacker.getYaw());
+            if(yawDifference < 40) return 2f;
+        }
+        return 0f;
     }
 
     @Override

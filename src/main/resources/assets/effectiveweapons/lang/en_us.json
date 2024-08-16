@@ -35,9 +35,9 @@
   "itemgroup.effectiveweapons": "Effective Weapons",
 
   "effect.effectiveweapons.fire_guard": "Fire Guard",
-  "effect.effectiveweapons.fire_guard.description": "Reduces all fire damage taken by 40% and cuts burning time in half",
+  "effect.effectiveweapons.fire_guard.description": "Reduces all fire damage taken by 40% and cuts burning time in half.",
   "effect.effectiveweapons.elevated": "Elevated",
-  "effect.effectiveweapons.elevated.description": "Increases the user's movement speed by 65% and the user's damage dealt by 50%, reduces user's damage taken by 20%, but user takes 10% of their health as recoil damage after each attack",
+  "effect.effectiveweapons.elevated.description": "Increases the user's movement speed by 65% and the user's damage dealt by 50%, reduces user's damage taken by 20%, but user takes 10% of their health as recoil damage after each attack.",
 
   "container.attuning" : "Attuning",
 

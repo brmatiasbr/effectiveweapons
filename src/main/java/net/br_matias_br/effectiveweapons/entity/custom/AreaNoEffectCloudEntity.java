@@ -52,7 +52,6 @@ public class AreaNoEffectCloudEntity extends Entity {
         super.tick();
         if(this.getWorld().isClient() && this.initCountdown > 0){
             ClientPlayNetworking.send(new EntitySynchronizationPayload(this.getId(), 0, initCountdown));
-//            System.out.println("Synchronizing");
             this.initCountdown--;
             return;
         }
