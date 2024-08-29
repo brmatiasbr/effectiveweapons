@@ -37,7 +37,9 @@ public class LightShieldItem extends ShieldItem implements AttunableItem{
     public static final String METER_FIRE_GUARD = "effectiveweapons:meter_fire_guard";
     public static final String METER_LUNGE = "effectiveweapons:meter_lunge";
     public static final String METER_STAGGER = "effectiveweapons:meter_stagger";
+    public static final String METER_REMOTE_COUNTER = "effectiveweapons:meter_remote_counter";
     public static final String CURRENT_CHARGE = "effectiveweapons:current_charge";
+    public static final int MAX_CHARGE = 20;
 
     @Override
     public String getTranslationKey() {
@@ -99,18 +101,19 @@ public class LightShieldItem extends ShieldItem implements AttunableItem{
         meterAbility = compound.getString(EffectiveWeapons.METER_ABILITY);
 
         if(controlHeld){
-            tooltip.add(Text.translatable("tooltip.light_shield").formatted(Formatting.ITALIC).formatted(Formatting.BLUE));
-            tooltip.add(Text.translatable("tooltip.light_shield_cont").formatted(Formatting.ITALIC).formatted(Formatting.BLUE));
-            tooltip.add(Text.translatable(near ? "tooltip.close_shield" : "tooltip.distant_shield").formatted(Formatting.ITALIC).formatted(Formatting.BLUE));
+            tooltip.add(Text.translatable("tooltip.light_shield").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
+            tooltip.add(Text.translatable("tooltip.light_shield_cont").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
+            tooltip.add(Text.translatable(near ? "tooltip.close_shield" : "tooltip.distant_shield").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
             this.buildCustomizationTooltip(tooltip, passiveAbility, meterAbility);
-            tooltip.add(Text.translatable(meterAbility.equals(METER_STAGGER) ? "tooltip.auto_meter" : "tooltip.sneak_meter").formatted(Formatting.ITALIC).formatted(Formatting.DARK_PURPLE));
-            tooltip.add(Text.translatable("tooltip.attuned_customization_enabled").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
+            if(!meterAbility.equals(EffectiveWeapons.METER_NONE))
+                tooltip.add(Text.translatable((meterAbility.equals(METER_STAGGER) || meterAbility.equals(METER_REMOTE_COUNTER)) ? "tooltip.auto_meter" : "tooltip.sneak_meter").formatted(Formatting.ITALIC).formatted(Formatting.DARK_PURPLE));
+            tooltip.add(Text.translatable("tooltip.attuned_customization_enabled").formatted(Formatting.ITALIC).formatted(Formatting.BLUE));
         }
         else{
-            tooltip.add(Text.translatable("tooltip.light_shield_summary").formatted(Formatting.ITALIC).formatted(Formatting.BLUE));
-            tooltip.add(Text.translatable(near ? "tooltip.close_shield_summary" : "tooltip.distant_shield_summary").formatted(Formatting.ITALIC).formatted(Formatting.BLUE));
+            tooltip.add(Text.translatable("tooltip.light_shield_summary").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
+            tooltip.add(Text.translatable(near ? "tooltip.close_shield_summary" : "tooltip.distant_shield_summary").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
             this.buildCustomizationTooltip(tooltip, passiveAbility, meterAbility);
-            tooltip.add(Text.translatable("tooltip.more_info").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
+            tooltip.add(Text.translatable("tooltip.more_info").formatted(Formatting.ITALIC).formatted(Formatting.BLUE));
         }
     }
 
@@ -172,7 +175,12 @@ public class LightShieldItem extends ShieldItem implements AttunableItem{
         customizations.add(EffectiveWeapons.PASSIVE_LUCKY);
         customizations.add(METER_FIRE_GUARD);
         customizations.add(METER_LUNGE);
-        customizations.add(METER_STAGGER);
+        if(!this.near){
+            customizations.add(METER_STAGGER);
+        }
+        else {
+            customizations.add(METER_REMOTE_COUNTER);
+        }
         return customizations;
     }
 
@@ -190,7 +198,12 @@ public class LightShieldItem extends ShieldItem implements AttunableItem{
         ArrayList<String> customizations = new ArrayList<>();
         customizations.add(METER_FIRE_GUARD);
         customizations.add(METER_LUNGE);
-        customizations.add(METER_STAGGER);
+        if(!this.near){
+            customizations.add(METER_STAGGER);
+        }
+        else {
+            customizations.add(METER_REMOTE_COUNTER);
+        }
         return customizations;
     }
 
@@ -225,10 +238,13 @@ public class LightShieldItem extends ShieldItem implements AttunableItem{
     @Override
     public int getItemBarColor(ItemStack stack) {
         String meterAbility = this.getMeterAbility(stack);
+        int maxDamage = stack.getMaxDamage();
+        float f = Math.max(0.0F, ((float)maxDamage - (float)stack.getDamage()) / (float)maxDamage);
         return switch (meterAbility) {
             case METER_FIRE_GUARD -> 0x810202;
             case METER_LUNGE -> 0x4190EB;
             case METER_STAGGER -> 0x929292;
+            case METER_REMOTE_COUNTER -> EffectiveWeapons.getColorFromGradient( 0x3E485F, 0x646C80, f);
             default -> 0xFFFFFF;
         };
     }

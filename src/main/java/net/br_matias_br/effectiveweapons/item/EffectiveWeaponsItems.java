@@ -28,11 +28,11 @@ public class EffectiveWeaponsItems {
             new BlessedLanceItem(EffectiveWeaponMaterial.INSTANCE, new Item.Settings().attributeModifiers(LanceItem.createAttributeModifiers(EffectiveWeaponMaterial.INSTANCE, 8f, -2.7f)).rarity(Rarity.RARE)));
     public static final Item PACT_AXE_SMITHING_TEMPLATE = registerItem("pact_axe_smithing_template", new CustomSmithingTemplate(new Item.Settings(), CustomSmithingTemplate.CustomSmithingTemplateType.PACT_AXE));
     public static final Item PACT_AXE = registerItem("pact_axe",
-            new PactAxeItem(EffectiveWeaponMaterial.INSTANCE, new Item.Settings().attributeModifiers(AxeItem.createAttributeModifiers(EffectiveWeaponMaterial.INSTANCE, 3f, -2.9f)).rarity(Rarity.RARE)));
+            new PactAxeItem(EffectiveWeaponMaterial.INSTANCE, new Item.Settings().attributeModifiers(AxeItem.createAttributeModifiers(EffectiveWeaponMaterial.INSTANCE, 12f, -2.9f)).rarity(Rarity.RARE)));
     public static final Item DEKAJA_TOME_SMITHING_TEMPLATE = registerItem("dekaja_tome_smithing_template", new CustomSmithingTemplate(new Item.Settings(), CustomSmithingTemplate.CustomSmithingTemplateType.DEKAJA_TOME));
     public static final Item DEKAJA_TOME = registerItem("dekaja_tome", new DekajaTomeItem(new Item.Settings().maxCount(1).rarity(Rarity.RARE)));
     public static final Item DOUBLE_BOW_SMITHING_TEMPLATE = registerItem("double_bow_smithing_template", new CustomSmithingTemplate(new Item.Settings(), CustomSmithingTemplate.CustomSmithingTemplateType.DOUBLE_BOW));
-    public static final Item DOUBLE_BOW = registerItem("double_bow", new DoubleBowItem(new Item.Settings().maxCount(1).rarity(Rarity.RARE)));
+    public static final Item DOUBLE_BOW = registerItem("double_bow", new DoubleBowItem(new Item.Settings().maxCount(1).rarity(Rarity.RARE).maxDamage(1001)));
     public static final Item CLOSE_SHIELD_SMITHING_TEMPLATE = registerItem("close_shield_smithing_template", new CustomSmithingTemplate(new Item.Settings(), CustomSmithingTemplate.CustomSmithingTemplateType.CLOSE_SHIELD));
     public static final Item CLOSE_SHIELD = registerItem("close_shield", new LightShieldItem(new Item.Settings().maxCount(1).rarity(Rarity.RARE).maxDamage(1001), true));
     public static final Item DISTANT_SHIELD_SMITHING_TEMPLATE = registerItem("distant_shield_smithing_template", new CustomSmithingTemplate(new Item.Settings(), CustomSmithingTemplate.CustomSmithingTemplateType.DISTANT_SHIELD));

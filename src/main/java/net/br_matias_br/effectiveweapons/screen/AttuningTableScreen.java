@@ -52,6 +52,7 @@ public class AttuningTableScreen extends HandledScreen<AttuningTableScreenHandle
         this.resetButton = this.addDrawableChild(ButtonWidget.builder(Text.translatable("message.reset"), button -> ClientPlayNetworking.send(new ItemModificationPayload("reset", true)))
                 .dimensions(x + 15, y + 19, 36, 20)
                 .build());
+        this.resetButton.active = false;
 
         this.backButton = this.addDrawableChild(new AttuningTexturedButtonWidget(x + 3, y + 3, 16, 16, BACK_BUTTON_TEXTURE, button -> this.changeSubscreen(0) , null));
         this.backButton.active = false;

@@ -111,15 +111,15 @@ public class RogueDaggerItem extends DaggerItem{
         NumberFormat formatter = new DecimalFormat("#0");
 
         if(controlHeld){
-            tooltip.add(Text.translatable("tooltip.rogue_dagger").formatted(Formatting.ITALIC).formatted(Formatting.DARK_GREEN));
-            tooltip.add(Text.translatable("tooltip.rogue_dagger_cont").formatted(Formatting.ITALIC).formatted(Formatting.DARK_GREEN));
-            tooltip.add(Text.translatable("tooltip.rogue_dagger_cont_part_two").formatted(Formatting.ITALIC).formatted(Formatting.DARK_GREEN));
-            tooltip.add(Text.translatable("tooltip.rogue_dagger_cooldown").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
-            tooltip.add(Text.translatable("tooltip.rogue_dagger_cooldown_cont").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
+            tooltip.add(Text.translatable("tooltip.rogue_dagger").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
+            tooltip.add(Text.translatable("tooltip.rogue_dagger_cont").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
+            tooltip.add(Text.translatable("tooltip.rogue_dagger_cont_part_two").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
+            tooltip.add(Text.translatable("tooltip.rogue_dagger_cooldown").formatted(Formatting.ITALIC).formatted(Formatting.BLUE));
+            tooltip.add(Text.translatable("tooltip.rogue_dagger_cooldown_cont").formatted(Formatting.ITALIC).formatted(Formatting.BLUE));
         }
         else{
-            tooltip.add(Text.translatable("tooltip.rogue_dagger_summary").formatted(Formatting.ITALIC).formatted(Formatting.DARK_GREEN));
-            tooltip.add(Text.translatable("tooltip.more_info").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
+            tooltip.add(Text.translatable("tooltip.rogue_dagger_summary").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
+            tooltip.add(Text.translatable("tooltip.more_info").formatted(Formatting.ITALIC).formatted(Formatting.BLUE));
         }
         if(onCooldown) tooltip.add(Text.literal("Remaining cooldown: " + formatter.format(cooldown * 100) + "%").formatted(Formatting.ITALIC).formatted(Formatting.RED));
         super.appendTooltip(stack, context, tooltip, type);

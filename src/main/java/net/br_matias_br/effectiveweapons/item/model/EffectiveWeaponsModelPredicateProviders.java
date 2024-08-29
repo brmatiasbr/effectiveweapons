@@ -38,5 +38,14 @@ public class EffectiveWeaponsModelPredicateProviders {
         ModelPredicateProviderRegistry.register(EffectiveWeaponsItems.DISTANT_SHIELD, Identifier.ofVanilla("blocking"),
                 (itemStack, clientWorld, livingEntity, seed) -> livingEntity != null &&
                         livingEntity.isUsingItem() && livingEntity.getActiveItem() == itemStack ? 1.0F : 0.0F);
+
+
+        ModelPredicateProviderRegistry.register(EffectiveWeaponsItems.BLESSED_LANCE, Identifier.ofVanilla("throwing"),
+                (itemStack, clientWorld, livingEntity, seed) -> {
+            if (livingEntity == null) {
+                return 0.0F;
+            }
+            return livingEntity.isUsingItem() && livingEntity.getActiveItem() == itemStack ? 1.0F : 0.0F;
+        });
     }
 }

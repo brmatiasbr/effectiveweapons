@@ -1,5 +1,6 @@
 package net.br_matias_br.effectiveweapons.effect;
 
+import net.br_matias_br.effectiveweapons.client.particle.EffectiveWeaponsParticles;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
 
@@ -9,6 +10,6 @@ public class ElevatedEffect extends StatusEffect {
     }
 
     public ElevatedEffect(){
-        super(StatusEffectCategory.BENEFICIAL, 0x94BDFF);
+        super(StatusEffectCategory.BENEFICIAL, 0x94BDFF, EffectiveWeaponsParticles.ELEVATED_EFFECT);
     }
 }

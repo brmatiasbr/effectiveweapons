@@ -18,6 +18,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.ArmorRenderer;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
+import net.minecraft.client.particle.SpellParticle;
 
 public class EffectiveWeaponsClient implements ClientModInitializer {
     @Override
@@ -32,6 +33,10 @@ public class EffectiveWeaponsClient implements ClientModInitializer {
         EntityModelLayerRegistry.registerModelLayer(EffectiveWeaponsModelLayers.LAPIS_CIRCLET, LapisCircletModel::getTexturedModelData);
 
         ParticleFactoryRegistry.getInstance().register(EffectiveWeaponsParticles.DOUBLE_BOW_CRIT, CriticalHitParticle.Factory::new);
+        ParticleFactoryRegistry.getInstance().register(EffectiveWeaponsParticles.FIRE_GUARD_EFFECT, SpellParticle.DefaultFactory::new);
+        ParticleFactoryRegistry.getInstance().register(EffectiveWeaponsParticles.ELEVATED_EFFECT, SpellParticle.DefaultFactory::new);
+        ParticleFactoryRegistry.getInstance().register(EffectiveWeaponsParticles.COUNTER_EFFECT, SpellParticle.DefaultFactory::new);
+        ParticleFactoryRegistry.getInstance().register(EffectiveWeaponsParticles.REMOTE_COUNTER_EFFECT, SpellParticle.DefaultFactory::new);
 
         HandledScreens.register(EffectiveWeaponsScreenHandlers.ATTUNING_TABLE_SCREEN_HANDLER_TYPE, AttuningTableScreen::new);
     }

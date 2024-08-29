@@ -1,11 +1,15 @@
 package net.br_matias_br.effectiveweapons.item.custom;
 
+import net.br_matias_br.effectiveweapons.EffectiveWeapons;
 import net.br_matias_br.effectiveweapons.item.EffectiveWeaponsItems;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.AttributeModifierSlot;
+import net.minecraft.component.type.AttributeModifiersComponent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.attribute.EntityAttributeModifier;
+import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
@@ -20,10 +24,9 @@ import net.minecraft.screen.slot.Slot;
 import net.minecraft.text.Text;
 import net.minecraft.util.ClickType;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -66,15 +69,15 @@ public class CircletArmorItem extends ArmorItem {
     public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
         boolean controlHeld = Screen.hasControlDown();
 
-        tooltip.add(Text.translatable("tooltip.lapis_circlet").formatted(Formatting.ITALIC).formatted(Formatting.DARK_GREEN));
-        tooltip.add(Text.translatable("tooltip.lapis_circlet_cont").formatted(Formatting.ITALIC).formatted(Formatting.DARK_GREEN));
+        tooltip.add(Text.translatable("tooltip.lapis_circlet").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
+        tooltip.add(Text.translatable("tooltip.lapis_circlet_cont").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
 
         if(controlHeld){
-            tooltip.add(Text.translatable("tooltip.lapis_circlet_exceptions").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
-            tooltip.add(Text.translatable("tooltip.lapis_circlet_exceptions_part_two").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
+            tooltip.add(Text.translatable("tooltip.lapis_circlet_exceptions").formatted(Formatting.ITALIC).formatted(Formatting.BLUE));
+            tooltip.add(Text.translatable("tooltip.lapis_circlet_exceptions_part_two").formatted(Formatting.ITALIC).formatted(Formatting.BLUE));
         }
         else{
-            tooltip.add(Text.translatable("tooltip.lapis_circlet_exceptions_prompt").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
+            tooltip.add(Text.translatable("tooltip.lapis_circlet_exceptions_prompt").formatted(Formatting.ITALIC).formatted(Formatting.BLUE));
         }
         super.appendTooltip(stack, context, tooltip, type);
     }
@@ -124,7 +127,21 @@ public class CircletArmorItem extends ArmorItem {
         if (clickType != ClickType.RIGHT) {
             return false;
         }
-        stack.setDamage(stack.getDamage() == 0 ? 1 : 0);
+        boolean head = stack.getDamage() == 0;
+        stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, AttributeModifiersComponent.builder()
+                .add(
+                        EntityAttributes.GENERIC_ARMOR,
+                        new EntityAttributeModifier(
+                                Identifier.of(EffectiveWeapons.MOD_ID, "effectiveweapons_circlet_armor_feet"), 2, EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        head ? AttributeModifierSlot.FEET : AttributeModifierSlot.HEAD
+                )
+                .add(
+                        EntityAttributes.GENERIC_ARMOR_TOUGHNESS,
+                        new EntityAttributeModifier(Identifier.of(EffectiveWeapons.MOD_ID, "effectiveweapons_circlet_toughness_feet"), 1, EntityAttributeModifier.Operation.ADD_VALUE),
+                        head ? AttributeModifierSlot.FEET : AttributeModifierSlot.HEAD
+                ).build());
+        stack.setDamage(head ? 1 : 0);
         return true;
     }
 

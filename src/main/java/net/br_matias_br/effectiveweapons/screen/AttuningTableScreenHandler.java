@@ -3,11 +3,8 @@ package net.br_matias_br.effectiveweapons.screen;
 import net.br_matias_br.effectiveweapons.EffectiveWeapons;
 import net.br_matias_br.effectiveweapons.block.EffectiveWeaponsBlocks;
 import net.br_matias_br.effectiveweapons.item.custom.AttunableItem;
-import net.br_matias_br.effectiveweapons.item.custom.LightShieldItem;
 import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.AttributeModifierSlot;
-import net.minecraft.component.type.AttributeModifiersComponent;
 import net.minecraft.component.type.NbtComponent;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
@@ -112,6 +109,7 @@ public class AttuningTableScreenHandler extends ScreenHandler {
                 }
             }
             else{
+                this.screen.resetButton.active = false;
                 for(AttuningTexturedButtonWidget buttonWidget : passiveButtons){
                     buttonWidget.active = false;
                     buttonWidget.setMessage(Text.literal("-------"));

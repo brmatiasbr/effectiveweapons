@@ -17,6 +17,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.player.ItemCooldownManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ToolMaterial;
@@ -28,10 +29,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -56,18 +54,42 @@ public class BlessedLanceItem extends LanceItem implements AttunableItem{
     public static final int MAX_DASH_CHARGE = 15;
 
     @Override
-    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
+    public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
         Collection<StatusEffectInstance> statusEffects = user.getStatusEffects();
+        boolean isCoolingDown = false;
+        ItemCooldownManager cooldownManager = null;
+        if(user instanceof PlayerEntity player) {
+            isCoolingDown = player.getItemCooldownManager().isCoolingDown(this);
+            cooldownManager = player.getItemCooldownManager();
+        }
         int cooldown = 0;
 
-        if(!statusEffects.isEmpty() && !user.getItemCooldownManager().isCoolingDown(this)){
+        if(!statusEffects.isEmpty() && !isCoolingDown){
             cooldown = neutralizeEffects(user, world, false);
         }
-        if(cooldown > 0){
-            user.getItemCooldownManager().set(this, Math.min(cooldown, 2400));
+        if(cooldown > 0 && cooldownManager != null){
+            cooldownManager.set(this, Math.min(cooldown, 2400));
         }
+    }
 
-        return cooldown > 0 ? TypedActionResult.success(user.getStackInHand(hand)) : super.use(world, user, hand);
+    @Override
+    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
+        ItemStack stack = user.getStackInHand(hand);
+        if(user.getItemCooldownManager().isCoolingDown(this)){
+            return TypedActionResult.fail(stack);
+        }
+        user.setCurrentHand(hand);
+        return TypedActionResult.consume(stack);
+    }
+
+    @Override
+    public UseAction getUseAction(ItemStack stack) {
+        return UseAction.SPEAR;
+    }
+
+    @Override
+    public int getMaxUseTime(ItemStack stack, LivingEntity user) {
+        return 72000;
     }
 
     @Override
@@ -159,6 +181,11 @@ public class BlessedLanceItem extends LanceItem implements AttunableItem{
     }
 
     @Override
+    public boolean allowComponentsUpdateAnimation(PlayerEntity player, Hand hand, ItemStack oldStack, ItemStack newStack) {
+        return false;
+    }
+
+    @Override
     public int getItemBarColor(ItemStack stack) {
         NbtCompound compound = this.getCompoundOrDefault(stack);
         String meterAbility = compound.getString(EffectiveWeapons.METER_ABILITY);
@@ -193,18 +220,19 @@ public class BlessedLanceItem extends LanceItem implements AttunableItem{
         NumberFormat formatter = new DecimalFormat("#0");
 
         if(controlHeld){
-            tooltip.add(Text.translatable("tooltip.blessed_lance").formatted(Formatting.ITALIC).formatted(Formatting.DARK_GREEN));
-            tooltip.add(Text.translatable("tooltip.blessed_lance_cont").formatted(Formatting.ITALIC).formatted(Formatting.DARK_GREEN));
-            tooltip.add(Text.translatable("tooltip.blessed_lance_cooldown").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
-            tooltip.add(Text.translatable("tooltip.blessed_lance_cooldown_cont").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
+            tooltip.add(Text.translatable("tooltip.blessed_lance").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
+            tooltip.add(Text.translatable("tooltip.blessed_lance_cont").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
+            tooltip.add(Text.translatable("tooltip.blessed_lance_cooldown").formatted(Formatting.ITALIC).formatted(Formatting.BLUE));
+            tooltip.add(Text.translatable("tooltip.blessed_lance_cooldown_cont").formatted(Formatting.ITALIC).formatted(Formatting.BLUE));
             this.buildCustomizationTooltip(tooltip, passiveAbility, meterAbility);
-            tooltip.add(Text.translatable(meterAbility.equals(METER_GRAVE_KEEPER) ? "tooltip.sneak_air_meter" : "tooltip.auto_meter").formatted(Formatting.ITALIC).formatted(Formatting.DARK_PURPLE));
-            tooltip.add(Text.translatable("tooltip.attuned_customization_enabled").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
+            if(!meterAbility.equals(EffectiveWeapons.METER_NONE))
+                tooltip.add(Text.translatable(meterAbility.equals(METER_GRAVE_KEEPER) ? "tooltip.sneak_air_meter" : "tooltip.auto_meter").formatted(Formatting.ITALIC).formatted(Formatting.DARK_PURPLE));
+            tooltip.add(Text.translatable("tooltip.attuned_customization_enabled").formatted(Formatting.ITALIC).formatted(Formatting.BLUE));
         }
         else{
-            tooltip.add(Text.translatable("tooltip.blessed_lance_summary").formatted(Formatting.ITALIC).formatted(Formatting.DARK_GREEN));
+            tooltip.add(Text.translatable("tooltip.blessed_lance_summary").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
             this.buildCustomizationTooltip(tooltip, passiveAbility, meterAbility);
-            tooltip.add(Text.translatable("tooltip.more_info").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
+            tooltip.add(Text.translatable("tooltip.more_info").formatted(Formatting.ITALIC).formatted(Formatting.BLUE));
         }
         if(onCooldown) tooltip.add(Text.literal("Remaining cooldown: " + formatter.format(cooldown * 100) + "%").formatted(Formatting.ITALIC).formatted(Formatting.RED));
         super.appendTooltip(stack, context, tooltip, type);

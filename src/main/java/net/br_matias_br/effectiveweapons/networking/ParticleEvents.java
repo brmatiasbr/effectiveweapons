@@ -3,13 +3,15 @@ package net.br_matias_br.effectiveweapons.networking;
 import net.br_matias_br.effectiveweapons.client.particle.EffectiveWeaponsParticles;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
+import net.minecraft.particle.DustColorTransitionParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3f;
 
 public class ParticleEvents {
     public static void particleEvent(ClientWorld world, int eventType, @Nullable Entity entity, double x, double y, double z){
         if(entity == null){
-            if(eventType >= 1 && eventType < 7){
+            if(eventType >= 1 && eventType < 10){
                 eventType = 0;
             }
         }
@@ -26,6 +28,12 @@ public class ParticleEvents {
             case 5: arrowCritical(world, entity);
                 break;
             case 6: fireGuardActivation(world, entity);
+                break;
+            case 7: burstImpact(world, entity);
+                break;
+            case 8: domainOfFire(world, entity);
+                break;
+            case 9: resonance(world, entity);
                 break;
             default: return;
         }
@@ -129,10 +137,60 @@ public class ParticleEvents {
         for(int i = 0; i <= 36; i ++){
             world.addParticle(ParticleTypes.SMALL_FLAME,
                     entityX, entityY, entityZ,
-                    (0.2) * -Math.sin((world.getRandom().nextDouble() * 360) - 180),
+                    (0.2) * -Math.sin(Math.toRadians((world.getRandom().nextDouble() * 360) - 180)),
                     0,
-                    (0.2) * Math.cos((world.getRandom().nextDouble() * 360) - 180));
+                    (0.2) * Math.cos(Math.toRadians((world.getRandom().nextDouble() * 360) - 180)));
         }
+    }
 
+    private static void burstImpact(ClientWorld world, Entity entity){
+        double entityX = entity.getX(), entityY = entity.getY() + entity.getHeight()/2, entityZ = entity.getZ();
+
+        for (int i = 0; i <= 72; i++) {
+            double yawRadian = Math.toRadians((i * 5) - 180);
+            world.addParticle(ParticleTypes.CLOUD,
+                    entityX, entityY, entityZ,
+                    (1) * -Math.sin(yawRadian),
+                    0,
+                    (1) * Math.cos(yawRadian));
+        }
+        world.addParticle(ParticleTypes.EXPLOSION_EMITTER, entityX, entityY, entityZ, 0, 0, 0);
+    }
+
+    private static void domainOfFire(ClientWorld world, Entity entity){
+        double entityX = entity.getX(), entityY = entity.getY() + entity.getHeight()/2, entityZ = entity.getZ();
+        for (int i = 0; i <= 36; i++) {
+            double yawRadian = Math.toRadians((i * 10) - 180);
+            world.addParticle(ParticleTypes.FLAME,
+                    entityX, entityY, entityZ,
+                    (0.25) * -Math.sin(yawRadian),
+                    0,
+                    (0.25) * Math.cos(yawRadian));
+        }
+    }
+
+    private static void resonance(ClientWorld world, Entity entity){
+        double entityX = entity.getX(), entityY = entity.getY() + entity.getHeight()/2, entityZ = entity.getZ();
+        for (int i = 0; i <= 36; i++) {
+            double yawRadian = Math.toRadians((i * 10) - 180);
+            world.addParticle(ParticleTypes.SCRAPE,
+                    entityX, entityY, entityZ,
+                    (6.33) * -Math.sin(yawRadian),
+                    0,
+                    (6.33) * Math.cos(yawRadian));
+        }
     }
 }
+
+//        for(int j = 0; j < 19; j++){  // makes a ball of fire, but doesn't look very good
+//            double pitchRadian = Math.toRadians((j * 10) - 90);
+//            int particles = (int)(36 * Math.abs(Math.cos(pitchRadian)));
+//            for (int i = 0; i <= particles; i++) {
+//                double yawRadian = Math.toRadians((i * 360/(double)particles) - 180);
+//                world.addParticle(ParticleTypes.FLAME,
+//                        entityX, entityY, entityZ,
+//                        (0.3) * -Math.sin(yawRadian) * Math.cos(pitchRadian),
+//                        (0.3) * -Math.sin(pitchRadian),
+//                        (0.3) * Math.cos(yawRadian) * Math.cos(pitchRadian));
+//            }
+//        }
