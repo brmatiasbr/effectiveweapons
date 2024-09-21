@@ -138,6 +138,7 @@
   "tooltip.air_meter":                       "Use while §ein the air§r to activate its meter ability",
   "tooltip.use_meter":                       "Use (default: right click) to activate its meter ability",
   "tooltip.swing_meter":                     "Swing §ewithout hitting an entity§r to activate its meter ability",
+  "tooltip.swing_any_meter":                 "Swing to activate its meter ability",
   "tooltip.attuned_customization_enabled":   "Can be customized using an §2Attuning Table§r",
 
   "tooltip.passive_none":                          "Passive: §7none§r",

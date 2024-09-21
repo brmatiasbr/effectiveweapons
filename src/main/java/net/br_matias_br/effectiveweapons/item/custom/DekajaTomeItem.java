@@ -64,7 +64,7 @@ public class DekajaTomeItem extends Item implements AttunableItem{
             int currentCharge = compound.getInt(CURRENT_CHARGE);
 
             if (world instanceof ServerWorld serverWorld) {
-                Entity entity = null;
+                Entity entity;
                 if(meterAbility.equals(METER_NEUTRALIZING_TERRAIN) && currentCharge >= MAX_CHARGE){
                     entity = new LargeAreaNoEffectCloudEntity(EffectiveWeaponsEntities.LARGE_AREA_NO_EFFECT_CLOUD_ENTITY_TYPE,
                             user.getWorld(), 300, user, user.getX(), user.getY() - 2.5, user.getZ(), frigid);
@@ -174,9 +174,7 @@ public class DekajaTomeItem extends Item implements AttunableItem{
                     color = 0xB7E8E8;
                 }
             }
-            case METER_NEUTRALIZING_TERRAIN -> {
-                color = EffectiveWeapons.getColorFromGradient(0xA1A1A1, 0x3F4040, f);
-            }
+            case METER_NEUTRALIZING_TERRAIN -> color = EffectiveWeapons.getColorFromGradient(0xA1A1A1, 0x3F4040, f);
             default -> super.getItemBarColor(stack);
         }
         return color;
@@ -214,7 +212,7 @@ public class DekajaTomeItem extends Item implements AttunableItem{
             tooltip.add(Text.translatable("tooltip.dekaja_tome_cooldown_cont").formatted(Formatting.ITALIC).formatted(Formatting.BLUE));
             this.buildCustomizationTooltip(tooltip, passiveAbility, meterAbility);
             if(!meterAbility.equals(EffectiveWeapons.METER_NONE))
-                tooltip.add(Text.translatable("tooltip.auto_meter").formatted(Formatting.ITALIC).formatted(Formatting.DARK_PURPLE));
+                tooltip.add(Text.translatable( meterAbility.equals(METER_REPULSION) ? "tooltip.swing_any_meter" : "tooltip.auto_meter").formatted(Formatting.ITALIC).formatted(Formatting.DARK_PURPLE));
             tooltip.add(Text.translatable("tooltip.attuned_customization_enabled").formatted(Formatting.ITALIC).formatted(Formatting.BLUE));
         }
         else{

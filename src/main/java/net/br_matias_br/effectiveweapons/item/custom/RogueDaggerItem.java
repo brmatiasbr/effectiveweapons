@@ -185,12 +185,8 @@ public class RogueDaggerItem extends DaggerItem implements AttunableItem{
                     color = 0xA35Ef7;
                 }
             }
-            case METER_BLADE_BEAM -> {
-                color = EffectiveWeapons.getColorFromGradient(0x7CCfff, 0x1674AB, f);
-            }
-            case METER_SNATCH -> {
-                color = EffectiveWeapons.getColorFromGradient(0x580000, 0xD03C3C, f);
-            }
+            case METER_BLADE_BEAM -> color = EffectiveWeapons.getColorFromGradient(0x7CCfff, 0x1674AB, f);
+            case METER_SNATCH -> color = EffectiveWeapons.getColorFromGradient(0x580000, 0xD03C3C, f);
             default -> super.getItemBarColor(stack);
         }
 
