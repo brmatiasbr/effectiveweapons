@@ -43,13 +43,5 @@
       "rotation": [0, 180, 0],
       "scale": [1, 1, 0.5]
     }
-  },
-  "overrides": [
-    {
-      "predicate": {
-        "throwing": 1
-      },
-      "model": "effectiveweapons:item/blessed_lance_held_up"
-    }
-  ]
+  }
 }

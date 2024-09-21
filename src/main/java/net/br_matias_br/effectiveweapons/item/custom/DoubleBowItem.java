@@ -236,14 +236,6 @@ public class DoubleBowItem extends BowItem implements AttunableItem{
         super.appendTooltip(stack, context, tooltip, type);
     }
 
-    private void buildCustomizationTooltip(List<Text> tooltip, String passive, String meter){
-        String passiveTranslationKey = passive.replace("effectiveweapons:", "tooltip.");
-        String meterTranslationKey = meter.replace("effectiveweapons:", "tooltip.");
-
-        tooltip.add(Text.translatable(passiveTranslationKey).formatted(Formatting.ITALIC).formatted(Formatting.LIGHT_PURPLE));
-        tooltip.add(Text.translatable(meterTranslationKey).formatted(Formatting.ITALIC).formatted(Formatting.DARK_PURPLE));
-    }
-
     @Override
     public ArrayList<String> getPossibleAttunedCustomizations() {
         ArrayList<String> customizations = new ArrayList<>();
@@ -294,24 +286,6 @@ public class DoubleBowItem extends BowItem implements AttunableItem{
             return attributeModifiersComponent;
         }
         return this.getDefaultAttributeModifiers();
-    }
-
-    @Override
-    public NbtCompound getCompoundOrDefault(ItemStack stack) {
-        NbtComponent component = stack.get(DataComponentTypes.CUSTOM_DATA);
-        if(component != null){
-            return component.copyNbt();
-        }
-
-        NbtCompound compound = new NbtCompound();
-        compound.putString(EffectiveWeapons.PASSIVE_ABILITY, EffectiveWeapons.PASSIVE_NONE);
-        compound.putString(EffectiveWeapons.METER_ABILITY, EffectiveWeapons.METER_NONE);
-
-        compound.putInt(CURRENT_CHARGE, 0);
-        NbtComponent nextComponent = NbtComponent.of(compound);
-        stack.set(DataComponentTypes.CUSTOM_DATA, nextComponent);
-
-        return compound;
     }
 
     @Override

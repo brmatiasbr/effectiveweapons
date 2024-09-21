@@ -27,6 +27,9 @@ public class EffectiveWeaponsDamageSources {
     public static final RegistryKey<DamageType> SCORCH_DAMAGE = RegistryKey.of(
             RegistryKeys.DAMAGE_TYPE,Identifier.of(EffectiveWeapons.MOD_ID, "scorch_damage"));
 
+    public static final RegistryKey<DamageType> BLADE_BEAM_DAMAGE = RegistryKey.of(
+            RegistryKeys.DAMAGE_TYPE,Identifier.of(EffectiveWeapons.MOD_ID, "blade_beam_damage"));
+
     public static DamageSource of(World world, RegistryKey<DamageType> key) {
         return new DamageSource(world.getRegistryManager().get(RegistryKeys.DAMAGE_TYPE).entryOf(key));
     }

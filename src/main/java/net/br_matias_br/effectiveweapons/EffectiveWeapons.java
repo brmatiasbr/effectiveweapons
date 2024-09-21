@@ -19,10 +19,7 @@ import net.minecraft.component.type.AttributeModifiersComponent;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.item.ItemStack;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
@@ -39,6 +36,7 @@ public class EffectiveWeapons implements ModInitializer {
         EffectiveWeaponsItems.registerItems();
         EffectiveWeaponsBlocks.registerModBlocks();
         EffectiveWeaponsItemGroup.registerItemGroups();
+        EffectiveWeaponsEffects.registerEffects();
 
         EffectiveWeaponsNetworking.registerCustomPayloads();
         EffectiveWeaponsNetworking.registerServerReceivers();
@@ -50,16 +48,6 @@ public class EffectiveWeapons implements ModInitializer {
 
         EffectiveWeaponsPotions.registerPotions();
     }
-
-    //    public static final StatusEffect FIRE_GUARD = Registry.register(Registries.STATUS_EFFECT, Identifier.of(EffectiveWeapons.MOD_ID, "fire_guard"), new FireGuardEffect());
-    public static final RegistryEntry<StatusEffect> FIRE_GUARD_REGISTRY_ENTRY = Registry.registerReference(Registries.STATUS_EFFECT, Identifier.of(EffectiveWeapons.MOD_ID, "fire_guard"), new FireGuardEffect()
-            .addAttributeModifier(EntityAttributes.GENERIC_BURNING_TIME, Identifier.of(MOD_ID ,"effect.fire_guard"), -0.5f, EntityAttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
-    public static final RegistryEntry<StatusEffect> ELEVATED_REGISTRY_ENTRY = Registry.registerReference(Registries.STATUS_EFFECT, Identifier.of(EffectiveWeapons.MOD_ID, "elevated"), new ElevatedEffect()
-            .addAttributeModifier(EntityAttributes.GENERIC_MOVEMENT_SPEED, Identifier.of(MOD_ID ,"effect.elevated"), 0.65f, EntityAttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
-    public static final RegistryEntry<StatusEffect> COUNTER_REGISTRY_ENTRY = Registry.registerReference(Registries.STATUS_EFFECT, Identifier.of(EffectiveWeapons.MOD_ID, "counter"), new CounterEffect()
-            .addAttributeModifier(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, Identifier.of(MOD_ID ,"effect.counter"), 0.3f, EntityAttributeModifier.Operation.ADD_VALUE));
-    public static final RegistryEntry<StatusEffect> REMOTE_COUNTER_REGISTRY_ENTRY = Registry.registerReference(Registries.STATUS_EFFECT, Identifier.of(EffectiveWeapons.MOD_ID, "remote_counter"), new RemoteCounterEffect()
-            .addAttributeModifier(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, Identifier.of(MOD_ID ,"effect.remote_counter"), 0.3f, EntityAttributeModifier.Operation.ADD_VALUE));
 
     public static final String PASSIVE_ABILITY = "effectiveweapons:passive_ability";
     public static final String METER_ABILITY = "effectiveweapons:meter_ability";
@@ -77,6 +65,8 @@ public class EffectiveWeapons implements ModInitializer {
     public static final String PASSIVE_BUFFER = "effectiveweapons:passive_buffer";
     public static final String PASSIVE_MIGHTY = "effectiveweapons:passive_mighty";
     public static final String PASSIVE_LUMBERJACK = "effectiveweapons:passive_lumberjack";
+    public static final String PASSIVE_STABBING = "effectiveweapons:passive_stabbing";
+    public static final String PASSIVE_MOBILE = "effectiveweapons:passive_mobile";
 
     public static AttributeModifiersComponent getAttributeModifiersOf(String key, ItemStack stack, AttunableItem attunableItem){
         RegistryEntry<EntityAttribute> attribute = getAttributeOf(key);
@@ -95,6 +85,11 @@ public class EffectiveWeapons implements ModInitializer {
             if (key.equals(DoubleBowItem.PASSIVE_FIRM_STANCE)) {
                 attributeModifiersComponent = attributeModifiersComponent.with(EntityAttributes.GENERIC_MOVEMENT_SPEED,
                         new EntityAttributeModifier(Identifier.of(EffectiveWeapons.MOD_ID, "effectiveweapons_firm_stance_slowness"), -0.75, EntityAttributeModifier.Operation.ADD_MULTIPLIED_TOTAL),
+                        AttributeModifierSlot.HAND);
+            }
+            if (key.equals(PASSIVE_MOBILE)) {
+                attributeModifiersComponent = attributeModifiersComponent.with(EntityAttributes.GENERIC_MOVEMENT_EFFICIENCY,
+                        new EntityAttributeModifier(Identifier.of(EffectiveWeapons.MOD_ID, "effectiveweapons_mobile_efficiency"), 0.35, EntityAttributeModifier.Operation.ADD_MULTIPLIED_TOTAL),
                         AttributeModifierSlot.HAND);
             }
         }
@@ -116,6 +111,8 @@ public class EffectiveWeapons implements ModInitializer {
             case PASSIVE_MIGHTY -> EntityAttributes.GENERIC_ATTACK_DAMAGE;
             case PASSIVE_LUMBERJACK -> EntityAttributes.PLAYER_BLOCK_BREAK_SPEED;
             case DoubleBowItem.PASSIVE_FIRM_STANCE -> EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE;
+            case PASSIVE_STABBING -> EntityAttributes.GENERIC_ATTACK_SPEED;
+            case PASSIVE_MOBILE -> EntityAttributes.GENERIC_MOVEMENT_SPEED;
             default -> null;
         };
     }
@@ -145,6 +142,10 @@ public class EffectiveWeapons implements ModInitializer {
                     0.75, EntityAttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
             case DoubleBowItem.PASSIVE_FIRM_STANCE -> new EntityAttributeModifier(Identifier.of(EffectiveWeapons.MOD_ID, "effectiveweapons_firm_stance"),
                     3, EntityAttributeModifier.Operation.ADD_VALUE);
+            case PASSIVE_STABBING -> new EntityAttributeModifier(Identifier.of(EffectiveWeapons.MOD_ID, "effectiveweapons_stabbing"),
+                    0.5, EntityAttributeModifier.Operation.ADD_VALUE);
+            case PASSIVE_MOBILE -> new EntityAttributeModifier(Identifier.of(EffectiveWeapons.MOD_ID, "effectiveweapons_mobile"),
+                    0.3, EntityAttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
             default -> null;
         };
     }

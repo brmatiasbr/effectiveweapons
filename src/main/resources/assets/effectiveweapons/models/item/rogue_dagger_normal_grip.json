@@ -1,0 +1,6 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "effectiveweapons:item/rogue_dagger"
+  }
+}

@@ -1,6 +1,7 @@
 package net.br_matias_br.effectiveweapons.entity.custom;
 
 import net.br_matias_br.effectiveweapons.EffectiveWeapons;
+import net.br_matias_br.effectiveweapons.effect.EffectiveWeaponsEffects;
 import net.br_matias_br.effectiveweapons.entity.EffectiveWeaponsEntities;
 import net.br_matias_br.effectiveweapons.item.custom.AttunableItem;
 import net.br_matias_br.effectiveweapons.item.custom.DoubleBowItem;
@@ -159,11 +160,11 @@ public class FixedDamageArrowEntity extends PersistentProjectileEntity {
             damage *= 5.0f;
         }
 
-        if (source.isIn(DamageTypeTags.IS_FIRE) && player.hasStatusEffect(EffectiveWeapons.FIRE_GUARD_REGISTRY_ENTRY)) {
+        if (source.isIn(DamageTypeTags.IS_FIRE) && player.hasStatusEffect(EffectiveWeaponsEffects.FIRE_GUARD_REGISTRY_ENTRY)) {
             damage *= 0.6f;
         }
 
-        if (!source.isIn(DamageTypeTags.NO_KNOCKBACK) && player.hasStatusEffect(EffectiveWeapons.ELEVATED_REGISTRY_ENTRY)) {
+        if (!source.isIn(DamageTypeTags.NO_KNOCKBACK) && player.hasStatusEffect(EffectiveWeaponsEffects.ELEVATED_REGISTRY_ENTRY)) {
             damage *= 0.8f;
         }
 

@@ -11,7 +11,6 @@ import net.minecraft.entity.player.ItemCooldownManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.util.Arm;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Final;

@@ -26,7 +26,10 @@ public abstract class ModelLoaderMixin {
     public void addIronLance(BlockColors blockColors, Profiler profiler, Map<Identifier, JsonUnbakedModel> jsonUnbakedModels, Map<Identifier, List<BlockStatesLoader.SourceTrackedData>> blockStates, CallbackInfo ci) {
         this.loadItemModel(EffectiveWeaponsModels.IRON_LANCE_MODEL);
         this.loadItemModel(EffectiveWeaponsModels.BLESSED_LANCE_MODEL);
+        this.loadItemModel(EffectiveWeaponsModels.BLESSED_LANCE_UP_MODEL);
         this.loadItemModel(EffectiveWeaponsModels.DEKAJA_TOME_MODEL);
         this.loadItemModel(EffectiveWeaponsModels.LAPIS_CIRCLET_MODEL);
+        this.loadItemModel(EffectiveWeaponsModels.IRON_DAGGER_NORMAL_GRIP_MODEL);
+        this.loadItemModel(EffectiveWeaponsModels.ROGUE_DAGGER_NORMAL_GRIP_MODEL);
     }
 }

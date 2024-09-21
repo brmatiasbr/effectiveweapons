@@ -26,9 +26,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.particle.ParticleEffect;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.particle.ShriekParticleEffect;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
@@ -187,14 +184,6 @@ public class PactAxeItem extends AxeItem implements AttunableItem{
         super.appendTooltip(stack, context, tooltip, type);
     }
 
-    private void buildCustomizationTooltip(List<Text> tooltip, String passive, String meter){
-        String passiveTranslationKey = passive.replace("effectiveweapons:", "tooltip.");
-        String meterTranslationKey = meter.replace("effectiveweapons:", "tooltip.");
-
-        tooltip.add(Text.translatable(passiveTranslationKey).formatted(Formatting.ITALIC).formatted(Formatting.LIGHT_PURPLE));
-        tooltip.add(Text.translatable(meterTranslationKey).formatted(Formatting.ITALIC).formatted(Formatting.DARK_PURPLE));
-    }
-
     @Override
     public int getItemBarColor(ItemStack stack) {
         NbtCompound compound = this.getCompoundOrDefault(stack);
@@ -244,24 +233,6 @@ public class PactAxeItem extends AxeItem implements AttunableItem{
     @Override
     public AttributeModifiersComponent getDefaultAttributeModifiers() {
         return AxeItem.createAttributeModifiers(EffectiveWeaponMaterial.INSTANCE, 12f, -2.9f);
-    }
-
-    @Override
-    public NbtCompound getCompoundOrDefault(ItemStack stack) {
-        NbtComponent component = stack.get(DataComponentTypes.CUSTOM_DATA);
-        if(component != null){
-            return component.copyNbt();
-        }
-
-        NbtCompound compound = new NbtCompound();
-        compound.putString(EffectiveWeapons.PASSIVE_ABILITY, EffectiveWeapons.PASSIVE_NONE);
-        compound.putString(EffectiveWeapons.METER_ABILITY, EffectiveWeapons.METER_NONE);
-
-        compound.putInt(CURRENT_CHARGE, 0);
-        NbtComponent nextComponent = NbtComponent.of(compound);
-        stack.set(DataComponentTypes.CUSTOM_DATA, nextComponent);
-
-        return compound;
     }
 
     @Override
@@ -318,4 +289,10 @@ public class PactAxeItem extends AxeItem implements AttunableItem{
         return Optional.ofNullable((Block)STRIPPED_BLOCKS.get(state.getBlock()))
                 .map(block -> block.getDefaultState().with(PillarBlock.AXIS, (Direction.Axis)state.get(PillarBlock.AXIS)));
     }
+
+    @Override
+    public boolean canChargeByHit() {
+        return true;
+    }
+
 }

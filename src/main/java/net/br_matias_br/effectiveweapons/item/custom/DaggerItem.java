@@ -72,6 +72,7 @@ public class DaggerItem extends ToolItem {
 
     @Override
     public boolean canMine(BlockState state, World world, BlockPos pos, PlayerEntity miner) {
-        return !miner.isCreative();
+        if(miner.isCreative()) return false;
+        return super.canMine(state, world, pos, miner);
     }
 }

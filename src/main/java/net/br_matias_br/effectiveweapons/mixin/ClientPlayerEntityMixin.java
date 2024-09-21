@@ -1,10 +1,12 @@
 package net.br_matias_br.effectiveweapons.mixin;
 
+import net.br_matias_br.effectiveweapons.item.custom.BlessedLanceItem;
 import net.br_matias_br.effectiveweapons.item.custom.LightShieldItem;
 import net.minecraft.client.input.Input;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -26,9 +28,12 @@ public abstract class ClientPlayerEntityMixin extends LivingEntity{
 
     @Inject(method = "tickMovement()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/tutorial/TutorialManager;onMovement(Lnet/minecraft/client/input/Input;)V"))
     public void removeShieldMovementPenalty(CallbackInfo ci){
-        if (this.isUsingItem() && this.getStackInHand(this.activeHand).getItem() instanceof LightShieldItem){
-            this.input.movementSideways *= 5f;
-            this.input.movementForward *= 5f;
+        if (this.isUsingItem()){
+            ItemStack stack = this.getStackInHand(this.activeHand);
+            if(stack.getItem() instanceof LightShieldItem || stack.getItem() instanceof BlessedLanceItem) {
+                this.input.movementSideways *= 5f;
+                this.input.movementForward *= 5f;
+            }
         }
     }
 }

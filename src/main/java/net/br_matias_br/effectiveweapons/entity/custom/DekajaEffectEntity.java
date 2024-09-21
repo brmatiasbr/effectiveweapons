@@ -9,6 +9,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.projectile.ProjectileEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.predicate.entity.EntityPredicates;
@@ -23,7 +24,9 @@ import java.util.List;
 public class DekajaEffectEntity extends ProjectileEntity {
     protected Entity summoner;
     protected int duration = 200;
-    boolean init = false;
+    protected boolean init = false;
+    protected boolean frigid = false;
+    private ItemStack weaponStack = null;
 
     public Entity getSummoner(){
         return this.summoner;
@@ -37,9 +40,16 @@ public class DekajaEffectEntity extends ProjectileEntity {
         this(entityType, world);
         this.summoner = summoner;
     }
-    public DekajaEffectEntity(EntityType<DekajaEffectEntity> entityType, World world, Entity summoner, double x, double y, double z) {
+
+    public DekajaEffectEntity(EntityType<DekajaEffectEntity> entityType, World world, Entity summoner, double x, double y, double z, ItemStack weaponStack) {
         this(entityType, world,summoner);
         this.setPosition(x, y, z);
+        this.weaponStack = weaponStack;
+    }
+
+    public DekajaEffectEntity(EntityType<DekajaEffectEntity> entityType, World world, Entity summoner, double x, double y, double z, ItemStack weaponStack, boolean frigid) {
+        this(entityType, world,summoner, x, y, z,weaponStack);
+        this.frigid = frigid;
     }
 
     public void setSummoner(Entity summoner){
@@ -113,7 +123,7 @@ public class DekajaEffectEntity extends ProjectileEntity {
             }
             AreaNoEffectCloudEntity areaNoEffectCloud = new AreaNoEffectCloudEntity(EffectiveWeaponsEntities.AREA_NO_EFFECT_CLOUD_ENTITY_TYPE,
                     this.getWorld(), duration, this.getSummoner() == null ? null : this.getSummoner(),
-                    spawnX, spawnY, spawnZ);
+                    spawnX, spawnY, spawnZ, weaponStack, this.frigid);
             this.getWorld().spawnEntity(areaNoEffectCloud);
         }
         else {

@@ -1,9 +1,7 @@
 package net.br_matias_br.effectiveweapons.entity;
 
 import net.br_matias_br.effectiveweapons.EffectiveWeapons;
-import net.br_matias_br.effectiveweapons.entity.custom.AreaNoEffectCloudEntity;
-import net.br_matias_br.effectiveweapons.entity.custom.DekajaEffectEntity;
-import net.br_matias_br.effectiveweapons.entity.custom.FixedDamageArrowEntity;
+import net.br_matias_br.effectiveweapons.entity.custom.*;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.registry.Registries;
@@ -30,11 +28,26 @@ public class EffectiveWeaponsEntities {
                     .build()
     );
 
-
     public static final EntityType<FixedDamageArrowEntity> FIXED_DAMAGE_ARROW_ENTITY = Registry.register(
             Registries.ENTITY_TYPE,
             Identifier.of(EffectiveWeapons.MOD_ID, "fixed_damage_arrow_entity"),
             EntityType.Builder.<FixedDamageArrowEntity>create(FixedDamageArrowEntity::new, SpawnGroup.MISC).dimensions(0.5f, 0.5f)
+                    .makeFireImmune()
+                    .build()
+    );
+
+    public static final EntityType<LargeAreaNoEffectCloudEntity> LARGE_AREA_NO_EFFECT_CLOUD_ENTITY_TYPE = Registry.register(
+            Registries.ENTITY_TYPE,
+            Identifier.of(EffectiveWeapons.MOD_ID, "large_area_no_effect_cloud_entity_type"),
+            EntityType.Builder.<LargeAreaNoEffectCloudEntity>create(LargeAreaNoEffectCloudEntity::new, SpawnGroup.MISC).dimensions(25f, 5f)
+                    .makeFireImmune()
+                    .build()
+    );
+
+    public static final EntityType<BladeBeamEntity> BLADE_BEAM_ENTITY_TYPE = Registry.register(
+            Registries.ENTITY_TYPE,
+            Identifier.of(EffectiveWeapons.MOD_ID, "blade_beam_entity_type"),
+            EntityType.Builder.<BladeBeamEntity>create(BladeBeamEntity::new, SpawnGroup.MISC).dimensions(2f, 0.5f)
                     .makeFireImmune()
                     .build()
     );

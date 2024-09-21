@@ -50,6 +50,7 @@ public class BlessedLanceItem extends LanceItem implements AttunableItem{
     public static final String METER_GRAVE_KEEPER = "effectiveweapons:meter_grave_keeper";
     public static final String METER_REFRESH = "effectiveweapons:meter_refresh";
     public static final String CURRENT_CHARGE = "effectiveweapons:current_charge";
+
     public static final int MAX_CHARGE = 200;
     public static final int MAX_DASH_CHARGE = 15;
 
@@ -78,6 +79,7 @@ public class BlessedLanceItem extends LanceItem implements AttunableItem{
         if(user.getItemCooldownManager().isCoolingDown(this)){
             return TypedActionResult.fail(stack);
         }
+        stack.setHolder(user);
         user.setCurrentHand(hand);
         return TypedActionResult.consume(stack);
     }
@@ -238,14 +240,6 @@ public class BlessedLanceItem extends LanceItem implements AttunableItem{
         super.appendTooltip(stack, context, tooltip, type);
     }
 
-    private void buildCustomizationTooltip(List<Text> tooltip, String passive, String meter){
-        String passiveTranslationKey = passive.replace("effectiveweapons:", "tooltip.");
-        String meterTranslationKey = meter.replace("effectiveweapons:", "tooltip.");
-
-        tooltip.add(Text.translatable(passiveTranslationKey).formatted(Formatting.ITALIC).formatted(Formatting.LIGHT_PURPLE));
-        tooltip.add(Text.translatable(meterTranslationKey).formatted(Formatting.ITALIC).formatted(Formatting.DARK_PURPLE));
-    }
-
     @Override
     public float getBonusAttackDamage(Entity target, float baseAttackDamage, DamageSource damageSource) {
         return target.getType().isIn(EntityTypeTags.SENSITIVE_TO_SMITE) ? 4 : 0;
@@ -302,24 +296,6 @@ public class BlessedLanceItem extends LanceItem implements AttunableItem{
     }
 
     @Override
-    public NbtCompound getCompoundOrDefault(ItemStack stack) {
-        NbtComponent component = stack.get(DataComponentTypes.CUSTOM_DATA);
-        if(component != null){
-            return component.copyNbt();
-        }
-
-        NbtCompound compound = new NbtCompound();
-        compound.putString(EffectiveWeapons.PASSIVE_ABILITY, EffectiveWeapons.PASSIVE_NONE);
-        compound.putString(EffectiveWeapons.METER_ABILITY, EffectiveWeapons.METER_NONE);
-
-        compound.putInt(CURRENT_CHARGE, 0);
-        NbtComponent nextComponent = NbtComponent.of(compound);
-        stack.set(DataComponentTypes.CUSTOM_DATA, nextComponent);
-
-        return compound;
-    }
-
-    @Override
     public String getDefaultPassiveCustomization() {
         return EffectiveWeapons.PASSIVE_NONE;
     }
@@ -337,5 +313,10 @@ public class BlessedLanceItem extends LanceItem implements AttunableItem{
     @Override
     public int getDefaultDurabilityDamage() {
         return 0;
+    }
+
+    @Override
+    public boolean canChargeByHit() {
+        return true;
     }
 }

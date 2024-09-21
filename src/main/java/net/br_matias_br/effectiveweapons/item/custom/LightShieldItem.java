@@ -1,6 +1,7 @@
 package net.br_matias_br.effectiveweapons.item.custom;
 
 import net.br_matias_br.effectiveweapons.EffectiveWeapons;
+import net.br_matias_br.effectiveweapons.effect.EffectiveWeaponsEffects;
 import net.br_matias_br.effectiveweapons.networking.ParticleRequestPayload;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -59,7 +60,7 @@ public class LightShieldItem extends ShieldItem implements AttunableItem{
                         ServerPlayNetworking.send(player, new ParticleRequestPayload(user.getId(), 6));
                     }
                 }
-                user.addStatusEffect(new StatusEffectInstance(EffectiveWeapons.FIRE_GUARD_REGISTRY_ENTRY, 1800, 0, false, true, true));
+                user.addStatusEffect(new StatusEffectInstance(EffectiveWeaponsEffects.FIRE_GUARD_REGISTRY_ENTRY, 1800, 0, false, true, true));
                 NbtCompound compound = this.getCompoundOrDefault(user.getStackInHand(hand));
                 compound.putInt(CURRENT_CHARGE, 0);
                 user.getStackInHand(hand).setDamage(1001);
@@ -117,34 +118,9 @@ public class LightShieldItem extends ShieldItem implements AttunableItem{
         }
     }
 
-    private void buildCustomizationTooltip(List<Text> tooltip, String passive, String meter){
-        String passiveTranslationKey = passive.replace("effectiveweapons:", "tooltip.");
-        String meterTranslationKey = meter.replace("effectiveweapons:", "tooltip.");
-
-        tooltip.add(Text.translatable(passiveTranslationKey).formatted(Formatting.ITALIC).formatted(Formatting.LIGHT_PURPLE));
-        tooltip.add(Text.translatable(meterTranslationKey).formatted(Formatting.ITALIC).formatted(Formatting.DARK_PURPLE));
-    }
-
     @Override
     public boolean canRepair(ItemStack stack, ItemStack ingredient) {
         return false;
-    }
-
-    public NbtCompound getCompoundOrDefault(ItemStack stack){
-        NbtComponent component = stack.get(DataComponentTypes.CUSTOM_DATA);
-        if(component != null){
-            return component.copyNbt();
-        }
-
-        NbtCompound compound = new NbtCompound();
-        compound.putString(EffectiveWeapons.PASSIVE_ABILITY, EffectiveWeapons.PASSIVE_NONE);
-        compound.putString(EffectiveWeapons.METER_ABILITY, EffectiveWeapons.METER_NONE);
-
-        compound.putInt(CURRENT_CHARGE, 0);
-        NbtComponent nextComponent = NbtComponent.of(compound);
-        stack.set(DataComponentTypes.CUSTOM_DATA, nextComponent);
-
-        return compound;
     }
 
     @Override

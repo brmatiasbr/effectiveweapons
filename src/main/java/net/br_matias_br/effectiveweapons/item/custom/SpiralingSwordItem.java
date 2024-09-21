@@ -175,14 +175,6 @@ public class SpiralingSwordItem extends SwordItem implements AttunableItem{
         super.appendTooltip(stack, context, tooltip, type);
     }
 
-    private void buildCustomizationTooltip(List<Text> tooltip, String passive, String meter){
-        String passiveTranslationKey = passive.replace("effectiveweapons:", "tooltip.");
-        String meterTranslationKey = meter.replace("effectiveweapons:", "tooltip.");
-
-        tooltip.add(Text.translatable(passiveTranslationKey).formatted(Formatting.ITALIC).formatted(Formatting.LIGHT_PURPLE));
-        tooltip.add(Text.translatable(meterTranslationKey).formatted(Formatting.ITALIC).formatted(Formatting.DARK_PURPLE));
-    }
-
     @Override
     public ArrayList<String> getPossibleAttunedCustomizations() {
         ArrayList<String> customizations = new ArrayList<>();
@@ -218,6 +210,7 @@ public class SpiralingSwordItem extends SwordItem implements AttunableItem{
         return SwordItem.createAttributeModifiers(EffectiveWeaponMaterial.INSTANCE, 5, -2.4f);
     }
 
+    @Override
     public NbtCompound getCompoundOrDefault(ItemStack stack){
         NbtComponent component = stack.get(DataComponentTypes.CUSTOM_DATA);
         if(component != null){
@@ -276,5 +269,10 @@ public class SpiralingSwordItem extends SwordItem implements AttunableItem{
             NbtCompound compound = this.getCompoundOrDefault(stack);
             return compound.getInt(SPIRALING_SWORD_CHARGE) >= MAX_CHARGE;
         }
+    }
+
+    @Override
+    public boolean canChargeByHit() {
+        return true;
     }
 }

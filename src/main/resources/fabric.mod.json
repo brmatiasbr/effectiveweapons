@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "effectiveweapons",
-  "version": "1.3.1",
+  "version": "1.4.0",
   "name": "Effective Weapons",
   "description": "Simple Minecraft mod revolving around weapons and status effects",
   "authors": ["br_matias_br"],

@@ -1,6 +1,7 @@
 package net.br_matias_br.effectiveweapons.mixin;
 
 import net.br_matias_br.effectiveweapons.EffectiveWeapons;
+import net.br_matias_br.effectiveweapons.effect.EffectiveWeaponsEffects;
 import net.br_matias_br.effectiveweapons.entity.EffectiveWeaponsDamageSources;
 import net.br_matias_br.effectiveweapons.item.EffectiveWeaponsItems;
 import net.br_matias_br.effectiveweapons.item.custom.*;
@@ -12,11 +13,11 @@ import net.minecraft.component.type.NbtComponent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -60,6 +61,8 @@ public abstract class LivingEntityMixin extends Entity {
     @Shadow public abstract boolean addStatusEffect(StatusEffectInstance effect);
 
     @Shadow public abstract boolean damage(DamageSource source, float amount);
+
+    @Shadow public abstract @Nullable StatusEffectInstance getStatusEffect(RegistryEntry<StatusEffect> effect);
 
     @Inject(method = "blockedByShield(Lnet/minecraft/entity/damage/DamageSource;)Z", at = @At(value = "HEAD"), cancellable = true)
     public void cancelIfHoldingSpecialShield(DamageSource source, CallbackInfoReturnable<Boolean> cir){
@@ -110,7 +113,7 @@ public abstract class LivingEntityMixin extends Entity {
                                         }
                                     }
                                     else if(meterAbility.equals(LightShieldItem.METER_REMOTE_COUNTER)){
-                                        this.addStatusEffect(new StatusEffectInstance(EffectiveWeapons.REMOTE_COUNTER_REGISTRY_ENTRY, 400, 0, false, false, true));
+                                        this.addStatusEffect(new StatusEffectInstance(EffectiveWeaponsEffects.REMOTE_COUNTER_REGISTRY_ENTRY, 400, 0, false, false, true));
 
                                         compound.putInt(LightShieldItem.CURRENT_CHARGE, 0);
                                         this.activeItemStack.setDamage(1001);
@@ -132,9 +135,9 @@ public abstract class LivingEntityMixin extends Entity {
     public float applyDamageModifiers(float amount, DamageSource source){
         float damageMultiplier = 1;
 
-        if(this.hasStatusEffect(EffectiveWeapons.FIRE_GUARD_REGISTRY_ENTRY) && source.isIn(DamageTypeTags.IS_FIRE)) damageMultiplier *= 0.6f; // Fire Guard fire damage reduction
+        if(this.hasStatusEffect(EffectiveWeaponsEffects.FIRE_GUARD_REGISTRY_ENTRY) && source.isIn(DamageTypeTags.IS_FIRE)) damageMultiplier *= 0.6f; // Fire Guard fire damage reduction
 
-        if(this.hasStatusEffect(EffectiveWeapons.ELEVATED_REGISTRY_ENTRY) && source.isIn(DamageTypeTags.NO_KNOCKBACK)) damageMultiplier *= 0.8f; // Elevated damage reduction, ignored by elevated recoil
+        if(this.hasStatusEffect(EffectiveWeaponsEffects.ELEVATED_REGISTRY_ENTRY) && source.isIn(DamageTypeTags.NO_KNOCKBACK)) damageMultiplier *= 0.8f; // Elevated damage reduction, ignored by elevated recoil
 
         Entity sourceEntity = source.getSource();
         if(sourceEntity != null){ // Checks damage source for any attacking entities, then if the entity is a projectile, recognizes its owner as the attacker
@@ -146,17 +149,23 @@ public abstract class LivingEntityMixin extends Entity {
                 attacker = livingEntity;
             }
             if(attacker != null){
-                if(attacker.hasStatusEffect(EffectiveWeapons.ELEVATED_REGISTRY_ENTRY)) { // Applies elevated damage multiplier and recoil damage
+                if(attacker.hasStatusEffect(EffectiveWeaponsEffects.ELEVATED_REGISTRY_ENTRY)) { // Applies elevated damage multiplier and recoil damage
                     damageMultiplier *= 1.5f;
                     attacker.damage(EffectiveWeaponsDamageSources.of(this.getWorld(), EffectiveWeaponsDamageSources.ELEVATED_RECOIL_DAMAGE),
                             attacker.getMaxHealth() * 0.1f);
                     attacker.timeUntilRegen = 0;
                 }
-                if(this.hasStatusEffect(EffectiveWeapons.COUNTER_REGISTRY_ENTRY) && !source.isIn(DamageTypeTags.NO_KNOCKBACK) && !source.isIn(DamageTypeTags.IS_PROJECTILE)){
+                if(this.hasStatusEffect(EffectiveWeaponsEffects.COUNTER_REGISTRY_ENTRY) && !source.isIn(DamageTypeTags.NO_KNOCKBACK) && !source.isIn(DamageTypeTags.IS_PROJECTILE)){
+                    if((Entity)this instanceof PlayerEntity player){
+                        attacker.setAttacking(player);
+                    }
                     attacker.damage(EffectiveWeaponsDamageSources.of(this.getWorld(), EffectiveWeaponsDamageSources.COUNTER_REFLECTED_DAMAGE), amount * damageMultiplier);
                     damageMultiplier = 0;
                 }
-                if(this.hasStatusEffect(EffectiveWeapons.REMOTE_COUNTER_REGISTRY_ENTRY) && !source.isIn(DamageTypeTags.NO_KNOCKBACK) && source.isIn(DamageTypeTags.IS_PROJECTILE)){
+                if(this.hasStatusEffect(EffectiveWeaponsEffects.REMOTE_COUNTER_REGISTRY_ENTRY) && !source.isIn(DamageTypeTags.NO_KNOCKBACK) && source.isIn(DamageTypeTags.IS_PROJECTILE)){
+                    if((Entity)this instanceof PlayerEntity player){
+                        attacker.setAttacking(player);
+                    }
                     attacker.damage(EffectiveWeaponsDamageSources.of(this.getWorld(), EffectiveWeaponsDamageSources.COUNTER_REFLECTED_DAMAGE), amount * damageMultiplier);
                     damageMultiplier = 0;
                 }
@@ -167,7 +176,7 @@ public abstract class LivingEntityMixin extends Entity {
                     String passiveAbility = compound.getString(EffectiveWeapons.PASSIVE_ABILITY);
                     String meterAbility = compound.getString(EffectiveWeapons.METER_ABILITY);
 
-                    if (stack.isOf(EffectiveWeaponsItems.SPIRALING_SWORD) && !attacker.getWorld().isClient()) { // Spiraling Sword default charge logic
+                    if(stack.isOf(EffectiveWeaponsItems.SPIRALING_SWORD) && !attacker.getWorld().isClient()) { // Spiraling Sword default charge logic
                         if (!passiveAbility.equals(SpiralingSwordItem.PASSIVE_DEATH_CHARGE)) {
                             float charge = compound.getFloat(attunableItem.getItemChargeId());
                             charge += amount * damageMultiplier;
@@ -182,7 +191,7 @@ public abstract class LivingEntityMixin extends Entity {
                         }
                     }
 
-                    if (stack.isOf(EffectiveWeaponsItems.BLESSED_LANCE) && !attacker.getWorld().isClient()) {
+                    if(stack.isOf(EffectiveWeaponsItems.BLESSED_LANCE) && !attacker.getWorld().isClient()) {
                         if(!meterAbility.equals(BlessedLanceItem.METER_GRAVE_KEEPER) && !meterAbility.equals(EffectiveWeapons.METER_NONE)){ // Blessed Lance default charge logic
                             int charge = compound.getInt(attunableItem.getItemChargeId());
                             charge += (int)(amount * damageMultiplier);
@@ -190,7 +199,7 @@ public abstract class LivingEntityMixin extends Entity {
                             if(charge >= BlessedLanceItem.MAX_CHARGE){
                                 charge = 0;
                                 if(meterAbility.equals(BlessedLanceItem.METER_ELEVATED)){
-                                    attacker.addStatusEffect(new StatusEffectInstance(EffectiveWeapons.ELEVATED_REGISTRY_ENTRY, 600, 0, false, false, true));
+                                    attacker.addStatusEffect(new StatusEffectInstance(EffectiveWeaponsEffects.ELEVATED_REGISTRY_ENTRY, 600, 0, false, false, true));
                                 }
                                 else if(meterAbility.equals(BlessedLanceItem.METER_REFRESH)){
                                     BlessedLanceItem.neutralizeEffects(attacker, attacker.getWorld(), true);
@@ -205,7 +214,7 @@ public abstract class LivingEntityMixin extends Entity {
                         }
                     }
 
-                    if (stack.isOf(EffectiveWeaponsItems.PACT_AXE) && !attacker.getWorld().isClient() && !source.isIn(DamageTypeTags.NO_KNOCKBACK)) {
+                    else if(stack.isOf(EffectiveWeaponsItems.PACT_AXE) && !attacker.getWorld().isClient() && !source.isIn(DamageTypeTags.NO_KNOCKBACK)) {
                         Random random = attacker.getWorld().getRandom();
                         boolean backfire = random.nextInt(100) < 20;
                         if(meterAbility.equals(EffectiveWeapons.METER_NONE)) stack.setDamage(backfire ? 1 : 2);
@@ -236,7 +245,7 @@ public abstract class LivingEntityMixin extends Entity {
                             if (charge == PactAxeItem.MAX_CHARGE && !meterAbility.equals(PactAxeItem.METER_RESONANCE)) {
                                 charge = 0;
                                 if (meterAbility.equals(PactAxeItem.METER_COUNTER)) {
-                                    attacker.addStatusEffect(new StatusEffectInstance(EffectiveWeapons.COUNTER_REGISTRY_ENTRY, 400, 0, false, true, true));
+                                    attacker.addStatusEffect(new StatusEffectInstance(EffectiveWeaponsEffects.COUNTER_REGISTRY_ENTRY, 400, 0, false, true, true));
                                 }
                                 else if(meterAbility.equals(PactAxeItem.METER_DOMAIN_OF_FIRE)){
                                     List<Entity> nearbyEntities = this.getWorld().getOtherEntities(attacker, Box.of(this.getPos(),
@@ -248,12 +257,15 @@ public abstract class LivingEntityMixin extends Entity {
                                     this.getWorld().playSound(null, this.getBlockPos(), SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.PLAYERS);
                                     if(!nearbyEntities.isEmpty()) for(Entity entity : nearbyEntities){
                                         if(entity instanceof LivingEntity livingEntity){
+                                            if(attacker instanceof PlayerEntity player){
+                                                livingEntity.setAttacking(player);
+                                            }
                                             livingEntity.damage(EffectiveWeaponsDamageSources.of(this.getWorld(), EffectiveWeaponsDamageSources.SCORCH_DAMAGE), 4);
                                             livingEntity.setOnFireFor(120);
                                         }
                                     }
                                     if(nearbyEntities.size() > 4){
-                                        attacker.addStatusEffect(new StatusEffectInstance(EffectiveWeapons.FIRE_GUARD_REGISTRY_ENTRY, 300, 0, false, true, true));
+                                        attacker.addStatusEffect(new StatusEffectInstance(EffectiveWeaponsEffects.FIRE_GUARD_REGISTRY_ENTRY, 300, 0, false, true, true));
                                     }
                                 }
                             }
@@ -264,9 +276,31 @@ public abstract class LivingEntityMixin extends Entity {
                         }
                         if(backfire) damageMultiplier = 0;
                     }
+                    else if(stack.isOf(EffectiveWeaponsItems.ROGUE_DAGGER)){
+                        if(!meterAbility.equals(EffectiveWeapons.METER_NONE)){
+                            int charge = compound.getInt(attunableItem.getItemChargeId());
+                            charge += (int)(amount * damageMultiplier);
+                            if(meterAbility.equals(RogueDaggerItem.METER_BLADE_BEAM)){
+                                if(charge > RogueDaggerItem.MAX_CHARGE) charge = RogueDaggerItem.MAX_CHARGE;
+                            }
+                            else if(charge > RogueDaggerItem.MAX_CHARGE_PURSUIT) charge = RogueDaggerItem.MAX_CHARGE_PURSUIT;
+
+                            stack.setDamage(1001 - (charge * (meterAbility.equals(RogueDaggerItem.METER_BLADE_BEAM) ? 10 : 25)));
+                            compound.putInt(attunableItem.getItemChargeId(), charge);
+                            NbtComponent component = NbtComponent.of(compound);
+                            stack.set(DataComponentTypes.CUSTOM_DATA, component);
+                        }
+                    }
                 }
             }
         }
         return amount * damageMultiplier;
+    }
+
+    @Inject(method = "addStatusEffect(Lnet/minecraft/entity/effect/StatusEffectInstance;Lnet/minecraft/entity/Entity;)Z", at = @At("HEAD"), cancellable = true)
+    public void applyIsolatedEffect(StatusEffectInstance effect, Entity source, CallbackInfoReturnable<Boolean> cir){
+        if(this.getStatusEffect(EffectiveWeaponsEffects.ISOLATED_REGISTRY_ENTRY) != null){
+            cir.setReturnValue(false);
+        }
     }
 }

@@ -14,10 +14,10 @@ import net.minecraft.util.Identifier;
 public class EffectiveWeaponsPotions {
     public static Potion FIRE_GUARD_POTION = Registry.register(Registries.POTION,
             Identifier.of(EffectiveWeapons.MOD_ID, "fire_guard_potion"),
-            new Potion(new StatusEffectInstance(EffectiveWeapons.FIRE_GUARD_REGISTRY_ENTRY, 1800, 0)));
+            new Potion(new StatusEffectInstance(EffectiveWeaponsEffects.FIRE_GUARD_REGISTRY_ENTRY, 1800, 0)));
     public static Potion FIRE_GUARD_POTION_LONG = Registry.register(Registries.POTION,
             Identifier.of(EffectiveWeapons.MOD_ID, "fire_guard_potion_long"),
-            new Potion(new StatusEffectInstance(EffectiveWeapons.FIRE_GUARD_REGISTRY_ENTRY, 4800, 0)));
+            new Potion(new StatusEffectInstance(EffectiveWeaponsEffects.FIRE_GUARD_REGISTRY_ENTRY, 4800, 0)));
     public static void registerPotions(){
         FabricBrewingRecipeRegistryBuilder.BUILD.register(builder -> {
             builder.registerPotionRecipe(
