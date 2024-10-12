@@ -8,6 +8,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.data.DataTracker;
+import net.minecraft.entity.data.TrackedData;
+import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -25,7 +27,8 @@ public class DekajaEffectEntity extends ProjectileEntity {
     protected Entity summoner;
     protected int duration = 200;
     protected boolean init = false;
-    protected boolean frigid = false;
+    private static final TrackedData<Boolean> FRIGID = DataTracker.registerData(DekajaEffectEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
+    private static final TrackedData<Boolean> GRAVITY = DataTracker.registerData(DekajaEffectEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
     private ItemStack weaponStack = null;
 
     public Entity getSummoner(){
@@ -49,7 +52,12 @@ public class DekajaEffectEntity extends ProjectileEntity {
 
     public DekajaEffectEntity(EntityType<DekajaEffectEntity> entityType, World world, Entity summoner, double x, double y, double z, ItemStack weaponStack, boolean frigid) {
         this(entityType, world,summoner, x, y, z,weaponStack);
-        this.frigid = frigid;
+        this.setFrigid(frigid);
+    }
+
+    public DekajaEffectEntity(EntityType<DekajaEffectEntity> entityType, World world, Entity summoner, double x, double y, double z, ItemStack weaponStack, boolean frigid, boolean gravity) {
+        this(entityType, world,summoner, x, y, z,weaponStack, frigid);
+        this.setGravityEnabled(gravity);
     }
 
     public void setSummoner(Entity summoner){
@@ -123,7 +131,7 @@ public class DekajaEffectEntity extends ProjectileEntity {
             }
             AreaNoEffectCloudEntity areaNoEffectCloud = new AreaNoEffectCloudEntity(EffectiveWeaponsEntities.AREA_NO_EFFECT_CLOUD_ENTITY_TYPE,
                     this.getWorld(), duration, this.getSummoner() == null ? null : this.getSummoner(),
-                    spawnX, spawnY, spawnZ, weaponStack, this.frigid);
+                    spawnX, spawnY, spawnZ, weaponStack, this.isFrigid(), this.isGravityEnabled());
             this.getWorld().spawnEntity(areaNoEffectCloud);
         }
         else {
@@ -140,19 +148,35 @@ public class DekajaEffectEntity extends ProjectileEntity {
 
     @Override
     protected void initDataTracker(DataTracker.Builder builder) {
-
+        builder.add(FRIGID, false);
+        builder.add(GRAVITY, false);
     }
 
     @Override
     protected void readCustomDataFromNbt(NbtCompound nbt) {
-
+        this.setFrigid(nbt.getBoolean("effectiveweapons:frigid"));
+        this.setGravityEnabled(nbt.getBoolean("effectiveweapons:gravity"));
     }
 
     @Override
     protected void writeCustomDataToNbt(NbtCompound nbt) {
-        Vec3d velocity = this.getVelocity();
-        nbt.putDouble("effectivewapons:velocityX", velocity.getX());
-        nbt.putDouble("effectivewapons:velocityY", velocity.getY());
-        nbt.putDouble("effectivewapons:velocityZ", velocity.getZ());
+        nbt.putBoolean("effectiveweapons:frigid", this.isFrigid());
+        nbt.putBoolean("effectiveweapons:gravity", this.isGravityEnabled());
+    }
+
+    public boolean isFrigid(){
+        return this.dataTracker.get(FRIGID);
+    }
+
+    public void setFrigid(boolean frigid){
+        this.dataTracker.set(FRIGID, frigid);
+    }
+
+    public boolean isGravityEnabled(){
+        return this.dataTracker.get(GRAVITY);
+    }
+
+    public void setGravityEnabled(boolean frigid){
+        this.dataTracker.set(GRAVITY, frigid);
     }
 }

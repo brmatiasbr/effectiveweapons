@@ -1,12 +1,12 @@
 {
   "textures": [
-    "effectiveweapons:elevated_effect0",
-    "effectiveweapons:elevated_effect1",
-    "effectiveweapons:elevated_effect0",
-    "effectiveweapons:elevated_effect1",
-    "effectiveweapons:elevated_effect0",
-    "effectiveweapons:elevated_effect1",
-    "effectiveweapons:elevated_effect2",
-    "effectiveweapons:elevated_effect3"
+    "effectiveweapons:elevated_effect/elevated_effect0",
+    "effectiveweapons:elevated_effect/elevated_effect1",
+    "effectiveweapons:elevated_effect/elevated_effect0",
+    "effectiveweapons:elevated_effect/elevated_effect1",
+    "effectiveweapons:elevated_effect/elevated_effect0",
+    "effectiveweapons:elevated_effect/elevated_effect1",
+    "effectiveweapons:elevated_effect/elevated_effect2",
+    "effectiveweapons:elevated_effect/elevated_effect3"
   ]
 }

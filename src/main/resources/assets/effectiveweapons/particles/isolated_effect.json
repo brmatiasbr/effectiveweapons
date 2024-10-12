@@ -1,8 +1,8 @@
 {
   "textures": [
-    "effectiveweapons:isolated_effect0",
-    "effectiveweapons:isolated_effect1",
-    "effectiveweapons:isolated_effect2",
-    "effectiveweapons:isolated_effect3"
+    "effectiveweapons:isolated_effect/isolated_effect0",
+    "effectiveweapons:isolated_effect/isolated_effect1",
+    "effectiveweapons:isolated_effect/isolated_effect2",
+    "effectiveweapons:isolated_effect/isolated_effect3"
   ]
 }

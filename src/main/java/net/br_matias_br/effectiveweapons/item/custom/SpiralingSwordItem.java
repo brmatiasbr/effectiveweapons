@@ -150,6 +150,7 @@ public class SpiralingSwordItem extends SwordItem implements AttunableItem{
     @Override
     public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
         boolean controlHeld = Screen.hasControlDown();
+        boolean shiftHeld = Screen.hasShiftDown();
         String passiveAbility, meterAbility;
 
         NbtCompound compound = this.getCompoundOrDefault(stack);
@@ -159,20 +160,23 @@ public class SpiralingSwordItem extends SwordItem implements AttunableItem{
         boolean deathCharge = passiveAbility.equals(PASSIVE_DEATH_CHARGE);
 
         if(controlHeld){
-            tooltip.add(Text.translatable("tooltip.spiraling_sword").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
-            tooltip.add(Text.translatable(deathCharge ? "tooltip.spiraling_sword_cont_death" : "tooltip.spiraling_sword_cont").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
-            tooltip.add(Text.translatable(deathCharge ? "tooltip.spiraling_sword_charge_death" : "tooltip.spiraling_sword_charge").formatted(Formatting.ITALIC).formatted(Formatting.BLUE));
-            tooltip.add(Text.translatable(deathCharge ? "tooltip.spiraling_sword_charge_cont_death" : "tooltip.spiraling_sword_charge_cont").formatted(Formatting.ITALIC).formatted(Formatting.BLUE));
-            this.buildCustomizationTooltip(tooltip, passiveAbility, meterAbility);
-            tooltip.add(Text.translatable(meterAbility.equals(METER_ALLIED_SPIRAL) ? "tooltip.entity_meter" : "tooltip.auto_meter").formatted(Formatting.ITALIC).formatted(Formatting.DARK_PURPLE));
-            tooltip.add(Text.translatable("tooltip.attuned_customization_enabled").formatted(Formatting.ITALIC).formatted(Formatting.BLUE));
+            if (shiftHeld) {
+                tooltip.add(Text.translatable("tooltip.spiraling_sword").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
+                tooltip.add(Text.translatable(deathCharge ? "tooltip.spiraling_sword_cont_death" : "tooltip.spiraling_sword_cont").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
+                tooltip.add(Text.translatable(deathCharge ? "tooltip.spiraling_sword_charge_death" : "tooltip.spiraling_sword_charge").formatted(Formatting.ITALIC).formatted(Formatting.BLUE));
+                tooltip.add(Text.translatable(deathCharge ? "tooltip.spiraling_sword_charge_cont_death" : "tooltip.spiraling_sword_charge_cont").formatted(Formatting.ITALIC).formatted(Formatting.BLUE));
+                this.buildCustomizationTooltip(tooltip, passiveAbility, meterAbility);
+                tooltip.add(Text.translatable(meterAbility.equals(METER_ALLIED_SPIRAL) ? "tooltip.entity_meter" : "tooltip.auto_meter").formatted(Formatting.ITALIC).formatted(Formatting.DARK_PURPLE));
+                tooltip.add(Text.translatable("tooltip.attuned_customization_enabled").formatted(Formatting.ITALIC).formatted(Formatting.BLUE));
+            } else {
+                tooltip.add(Text.translatable("tooltip.spiraling_sword_summary").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
+                this.buildCustomizationTooltip(tooltip, passiveAbility, meterAbility);
+                tooltip.add(Text.translatable("tooltip.more_info").formatted(Formatting.ITALIC).formatted(Formatting.BLUE));
+            }
         }
         else{
-            tooltip.add(Text.translatable("tooltip.spiraling_sword_summary").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
-            this.buildCustomizationTooltip(tooltip, passiveAbility, meterAbility);
-            tooltip.add(Text.translatable("tooltip.more_info").formatted(Formatting.ITALIC).formatted(Formatting.BLUE));
+            tooltip.add(Text.translatable("tooltip.show_weapon_summary").formatted(Formatting.ITALIC).formatted(Formatting.BLUE));
         }
-        super.appendTooltip(stack, context, tooltip, type);
     }
 
     @Override

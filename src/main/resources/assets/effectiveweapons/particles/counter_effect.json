@@ -1,12 +1,12 @@
 {
   "textures": [
-    "effectiveweapons:counter_effect0",
-    "effectiveweapons:counter_effect1",
-    "effectiveweapons:counter_effect0",
-    "effectiveweapons:counter_effect1",
-    "effectiveweapons:counter_effect0",
-    "effectiveweapons:counter_effect1",
-    "effectiveweapons:counter_effect2",
-    "effectiveweapons:counter_effect3"
+    "effectiveweapons:counter_effect/counter_effect0",
+    "effectiveweapons:counter_effect/counter_effect1",
+    "effectiveweapons:counter_effect/counter_effect0",
+    "effectiveweapons:counter_effect/counter_effect1",
+    "effectiveweapons:counter_effect/counter_effect0",
+    "effectiveweapons:counter_effect/counter_effect1",
+    "effectiveweapons:counter_effect/counter_effect2",
+    "effectiveweapons:counter_effect/counter_effect3"
   ]
 }

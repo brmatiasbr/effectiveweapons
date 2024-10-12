@@ -5,6 +5,8 @@ import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.particle.DustColorTransitionParticleEffect;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.particle.ShriekParticleEffect;
+import net.minecraft.util.math.random.Random;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
@@ -23,7 +25,7 @@ public class ParticleEvents {
                 break;
             case 3: effectsStolenParticleEvent(world, entity);
                 break;
-            case 4: entityHealed(world, entity);
+            case 4:
                 break;
             case 5: arrowCritical(world, entity);
                 break;
@@ -64,15 +66,18 @@ public class ParticleEvents {
     private static void cleanseParticleEvent(ClientWorld world, Entity entity){
         double entityX = entity.getX(), entityY = entity.getY(), entityZ = entity.getZ();
         double entityVelocityX = entity.getVelocity().getX(), entityVelocityZ = entity.getVelocity().getZ();
+        Random random = world.getRandom();
         for(int i = 0; i < 36; i++){
             double radianAngle = Math.toRadians(i * 10);
             double radianAngleOpposite = Math.toRadians((i * 10) + 180);
 
-            world.addParticle(ParticleTypes.END_ROD,
-                    entityX - (1 * Math.sin(radianAngle)), entityY + (entity.getHeight() / 2),
-                    entityZ + (1 * Math.cos(radianAngle)),
-                    entityVelocityX + 0.05 * (-Math.sin(radianAngleOpposite)), 0,
-                    entityVelocityZ + 0.05 * (Math.cos(radianAngleOpposite)));
+            if(random.nextFloat() >= 0.4f){
+                world.addParticle(EffectiveWeaponsParticles.REFRESH_PARTICLE,
+                        entityX - (0.55 * Math.sin(radianAngle)), entityY + (entity.getHeight() / 3),
+                        entityZ + (0.55 * Math.cos(radianAngle)),
+                        entityVelocityX + 0.05 * (-Math.sin(radianAngleOpposite)), 0,
+                        entityVelocityZ + 0.05 * (Math.cos(radianAngleOpposite)));
+            }
         }
     }
 
@@ -88,22 +93,6 @@ public class ParticleEvents {
                     entityX - (1 * Math.sin(radianAngle)), entityY + (entity.getHeight() / 2),
                     entityZ + (1 * Math.cos(radianAngle)),
                     0, 0,
-                    0);
-        }
-    }
-
-    private static void entityHealed(ClientWorld world, Entity entity){
-        double entityX = entity.getX(), entityY = entity.getY(), entityZ = entity.getZ();
-
-        for(int i = 0; i < 36; i++){
-            double radianAngle = Math.toRadians(i * 10);
-            int nextInt = world.getRandom().nextInt(10);
-            boolean paticleSuccessful = nextInt < 3;
-
-            if(paticleSuccessful) world.addParticle(ParticleTypes.HAPPY_VILLAGER,
-                    entityX - (1 * Math.sin(radianAngle)), entityY + (entity.getHeight() / 2),
-                    entityZ + (1 * Math.cos(radianAngle)),
-                    0, world.getRandom().nextDouble() * 0.1,
                     0);
         }
     }
@@ -146,14 +135,7 @@ public class ParticleEvents {
     private static void burstImpact(ClientWorld world, Entity entity){
         double entityX = entity.getX(), entityY = entity.getY() + entity.getHeight()/2, entityZ = entity.getZ();
 
-        for (int i = 0; i <= 72; i++) {
-            double yawRadian = Math.toRadians((i * 5) - 180);
-            world.addParticle(ParticleTypes.CLOUD,
-                    entityX, entityY, entityZ,
-                    (1) * -Math.sin(yawRadian),
-                    0,
-                    (1) * Math.cos(yawRadian));
-        }
+        world.addParticle(EffectiveWeaponsParticles.BURST_IMPACT_PARTICLE, entityX, entityY, entityZ, 0, 0, 0);
         world.addParticle(ParticleTypes.EXPLOSION_EMITTER, entityX, entityY, entityZ, 0, 0, 0);
     }
 
@@ -171,15 +153,12 @@ public class ParticleEvents {
 
     private static void resonance(ClientWorld world, Entity entity){
         double entityX = entity.getX(), entityY = entity.getY() + entity.getHeight()/2, entityZ = entity.getZ();
-        for (int i = 0; i <= 36; i++) {
-            double yawRadian = Math.toRadians((i * 10) - 180);
-            world.addParticle(ParticleTypes.SCRAPE,
+            world.addParticle(EffectiveWeaponsParticles.RESONANCE_PARTICLE,
                     entityX, entityY, entityZ,
-                    (6.33) * -Math.sin(yawRadian),
                     0,
-                    (6.33) * Math.cos(yawRadian));
+                    0,
+                    0);
         }
-    }
 }
 
 //        for(int j = 0; j < 19; j++){  // makes a ball of fire, but doesn't look very good

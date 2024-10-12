@@ -10,4 +10,7 @@ public class EffectiveWeaponsModelLayers {
 
     public static final EntityModelLayer BLADE_BEAM =
             new EntityModelLayer(Identifier.of(EffectiveWeapons.MOD_ID, "blade_beam"), "main");
+
+    public static final EntityModelLayer AREA_NO_EFFECT_CLOUD =
+            new EntityModelLayer(Identifier.of(EffectiveWeapons.MOD_ID, "area_no_effect_cloud"), "main");
 }

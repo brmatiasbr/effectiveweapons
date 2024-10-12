@@ -48,6 +48,8 @@ public class DekajaTomeItem extends Item implements AttunableItem{
     public static final String PASSIVE_ISOLATION = "effectiveweapons:passive_isolation";
     public static final String METER_NEUTRALIZING_TERRAIN = "effectiveweapons:meter_neutralizing_terrain";
     public static final String METER_REPULSION = "effectiveweapons:meter_repulsion";
+    public static final String METER_GRAVITY = "effectiveweapons:meter_gravity";
+
     public static final int MAX_CHARGE = 10;
     public static final int MAX_CHARGE_REPULSION = 100;
 
@@ -74,8 +76,15 @@ public class DekajaTomeItem extends Item implements AttunableItem{
                     stack.set(DataComponentTypes.CUSTOM_DATA, NbtComponent.of(compound));
                 }
                 else{
+                    boolean gravity = false;
+                    if(meterAbility.equals(METER_GRAVITY) && currentCharge >= MAX_CHARGE){
+                        gravity = true;
+                        compound.putInt(LightShieldItem.CURRENT_CHARGE, 0);
+                        stack.setDamage(1001);
+                        stack.set(DataComponentTypes.CUSTOM_DATA, NbtComponent.of(compound));
+                    }
                     DekajaEffectEntity dekajaEffect = new DekajaEffectEntity(EffectiveWeaponsEntities.DEKAJA_EFFECT_ENTITY_TYPE,
-                            world, user, user.getX(), user.getEyeY() - 0.4, user.getZ(), stack, frigid);
+                            world, user, user.getX(), user.getEyeY() - 0.4, user.getZ(), stack, frigid, gravity);
                     dekajaEffect.addVelocity(this.getVector(user, 0.75 * f));
                     entity = dekajaEffect;
                 }
@@ -175,6 +184,7 @@ public class DekajaTomeItem extends Item implements AttunableItem{
                 }
             }
             case METER_NEUTRALIZING_TERRAIN -> color = EffectiveWeapons.getColorFromGradient(0xA1A1A1, 0x3F4040, f);
+            case METER_GRAVITY -> color = EffectiveWeapons.getColorFromGradient(0xF7650A, 0xFCF226, f);
             default -> super.getItemBarColor(stack);
         }
         return color;
@@ -191,6 +201,7 @@ public class DekajaTomeItem extends Item implements AttunableItem{
         float cooldown = 0;
         ClientPlayerEntity player = MinecraftClient.getInstance().player;
         boolean controlHeld = Screen.hasControlDown();
+        boolean shiftHeld = Screen.hasShiftDown();
         String passiveAbility, meterAbility;
 
         NbtCompound compound = this.getCompoundOrDefault(stack);
@@ -205,23 +216,26 @@ public class DekajaTomeItem extends Item implements AttunableItem{
         NumberFormat formatter = new DecimalFormat("#0");
 
         if(controlHeld){
-            tooltip.add(Text.translatable("tooltip.dekaja_tome").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
-            tooltip.add(Text.translatable("tooltip.dekaja_tome_cont").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
-            tooltip.add(Text.translatable("tooltip.dekaja_tome_cont_part_two").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
-            tooltip.add(Text.translatable("tooltip.dekaja_tome_cooldown").formatted(Formatting.ITALIC).formatted(Formatting.BLUE));
-            tooltip.add(Text.translatable("tooltip.dekaja_tome_cooldown_cont").formatted(Formatting.ITALIC).formatted(Formatting.BLUE));
-            this.buildCustomizationTooltip(tooltip, passiveAbility, meterAbility);
-            if(!meterAbility.equals(EffectiveWeapons.METER_NONE))
-                tooltip.add(Text.translatable( meterAbility.equals(METER_REPULSION) ? "tooltip.swing_any_meter" : "tooltip.auto_meter").formatted(Formatting.ITALIC).formatted(Formatting.DARK_PURPLE));
-            tooltip.add(Text.translatable("tooltip.attuned_customization_enabled").formatted(Formatting.ITALIC).formatted(Formatting.BLUE));
+            if (shiftHeld) {
+                tooltip.add(Text.translatable("tooltip.dekaja_tome").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
+                tooltip.add(Text.translatable("tooltip.dekaja_tome_cont").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
+                tooltip.add(Text.translatable("tooltip.dekaja_tome_cont_part_two").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
+                tooltip.add(Text.translatable("tooltip.dekaja_tome_cooldown").formatted(Formatting.ITALIC).formatted(Formatting.BLUE));
+                tooltip.add(Text.translatable("tooltip.dekaja_tome_cooldown_cont").formatted(Formatting.ITALIC).formatted(Formatting.BLUE));
+                this.buildCustomizationTooltip(tooltip, passiveAbility, meterAbility);
+                if (!meterAbility.equals(EffectiveWeapons.METER_NONE))
+                    tooltip.add(Text.translatable(meterAbility.equals(METER_REPULSION) ? "tooltip.swing_any_meter" : "tooltip.auto_meter").formatted(Formatting.ITALIC).formatted(Formatting.DARK_PURPLE));
+                tooltip.add(Text.translatable("tooltip.attuned_customization_enabled").formatted(Formatting.ITALIC).formatted(Formatting.BLUE));
+            } else {
+                tooltip.add(Text.translatable("tooltip.dekaja_tome_summary").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
+                this.buildCustomizationTooltip(tooltip, passiveAbility, meterAbility);
+                tooltip.add(Text.translatable("tooltip.more_info").formatted(Formatting.ITALIC).formatted(Formatting.BLUE));
+            }
         }
         else{
-            tooltip.add(Text.translatable("tooltip.dekaja_tome_summary").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
-            this.buildCustomizationTooltip(tooltip, passiveAbility, meterAbility);
-            tooltip.add(Text.translatable("tooltip.more_info").formatted(Formatting.ITALIC).formatted(Formatting.BLUE));
+            tooltip.add(Text.translatable("tooltip.show_weapon_summary").formatted(Formatting.ITALIC).formatted(Formatting.BLUE));
         }
         if(onCooldown) tooltip.add(Text.literal("Remaining cooldown: " + formatter.format(cooldown * 100) + "%").formatted(Formatting.ITALIC).formatted(Formatting.RED));
-        super.appendTooltip(stack, context, tooltip, type);
     }
 
     @Override
@@ -238,6 +252,7 @@ public class DekajaTomeItem extends Item implements AttunableItem{
         customizations.add(PASSIVE_ISOLATION);
         customizations.add(METER_NEUTRALIZING_TERRAIN);
         customizations.add(METER_REPULSION);
+        customizations.add(METER_GRAVITY);
         return customizations;
     }
 
@@ -255,6 +270,7 @@ public class DekajaTomeItem extends Item implements AttunableItem{
         ArrayList<String> customizations = new ArrayList<>();
         customizations.add(METER_NEUTRALIZING_TERRAIN);
         customizations.add(METER_REPULSION);
+        customizations.add(METER_GRAVITY);
         return customizations;
     }
 

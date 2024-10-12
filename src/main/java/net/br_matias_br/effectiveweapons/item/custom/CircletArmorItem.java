@@ -68,16 +68,20 @@ public class CircletArmorItem extends ArmorItem {
     @Override
     public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
         boolean controlHeld = Screen.hasControlDown();
-
-        tooltip.add(Text.translatable("tooltip.lapis_circlet").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
-        tooltip.add(Text.translatable("tooltip.lapis_circlet_cont").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
+        boolean shiftHeld = Screen.hasShiftDown();
 
         if(controlHeld){
-            tooltip.add(Text.translatable("tooltip.lapis_circlet_exceptions").formatted(Formatting.ITALIC).formatted(Formatting.BLUE));
-            tooltip.add(Text.translatable("tooltip.lapis_circlet_exceptions_part_two").formatted(Formatting.ITALIC).formatted(Formatting.BLUE));
+            tooltip.add(Text.translatable("tooltip.lapis_circlet").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
+            tooltip.add(Text.translatable("tooltip.lapis_circlet_cont").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
+            if (shiftHeld) {
+                tooltip.add(Text.translatable("tooltip.lapis_circlet_exceptions").formatted(Formatting.ITALIC).formatted(Formatting.BLUE));
+                tooltip.add(Text.translatable("tooltip.lapis_circlet_exceptions_part_two").formatted(Formatting.ITALIC).formatted(Formatting.BLUE));
+            } else {
+                tooltip.add(Text.translatable("tooltip.lapis_circlet_exceptions_prompt").formatted(Formatting.ITALIC).formatted(Formatting.BLUE));
+            }
         }
         else{
-            tooltip.add(Text.translatable("tooltip.lapis_circlet_exceptions_prompt").formatted(Formatting.ITALIC).formatted(Formatting.BLUE));
+            tooltip.add(Text.translatable("tooltip.show_weapon_summary").formatted(Formatting.ITALIC).formatted(Formatting.BLUE));
         }
         super.appendTooltip(stack, context, tooltip, type);
     }

@@ -21,14 +21,6 @@ public class LargeAreaNoEffectCloudRenderer extends EntityRenderer<LargeAreaNoEf
 
     @Override
     public void render(LargeAreaNoEffectCloudEntity entity, float yaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
-        Random random = entity.getWorld().getRandom();
-        for(int i = 0; i < 15; i++){
-            double randomX = random.nextDouble() * 12.5 * (random.nextBoolean() ? 1 : -1);
-            double randomZ = random.nextDouble() * 12.5 * (random.nextBoolean() ? 1 : -1);
-            double randomY = random.nextDouble() * 2.5  * (random.nextBoolean() ? 1 : -1);
-
-            entity.getWorld().addParticle(ParticleTypes.EFFECT, entity.getX() + randomX, entity.getY() + randomY, entity.getZ() + randomZ, 0, 0.01, 0);
-        }
         super.render(entity, yaw, tickDelta, matrices, vertexConsumers, light);
     }
 }

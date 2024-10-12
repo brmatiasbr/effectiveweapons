@@ -28,7 +28,7 @@ public class DekajaEffectEntityRenderer extends EntityRenderer<DekajaEffectEntit
             double randomY = random.nextDouble() * 0.25 * (random.nextBoolean() ? 1 : -1);
             double randomZ = random.nextDouble() * 0.25 * (random.nextBoolean() ? 1 : -1);
 
-            entity.getWorld().addParticle(ParticleTypes.CLOUD, entity.getX() + randomX, entity.getY() + randomY, entity.getZ() + randomZ,
+            entity.getWorld().addParticle((entity.isFrigid() ? ParticleTypes.SNOWFLAKE : ParticleTypes.CLOUD), entity.getX() + randomX, entity.getY() + randomY, entity.getZ() + randomZ,
                     0, 0, 0);
         }
         super.render(entity, yaw, tickDelta, matrices, vertexConsumers, light);

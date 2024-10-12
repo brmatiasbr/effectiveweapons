@@ -14,6 +14,9 @@ public class EffectiveWeaponsParticles {
     public static final SimpleParticleType COUNTER_EFFECT = FabricParticleTypes.simple();
     public static final SimpleParticleType REMOTE_COUNTER_EFFECT = FabricParticleTypes.simple();
     public static final SimpleParticleType ISOLATED_EFFECT = FabricParticleTypes.simple();
+    public static final SimpleParticleType REFRESH_PARTICLE = FabricParticleTypes.simple();
+    public static final SimpleParticleType RESONANCE_PARTICLE = FabricParticleTypes.simple();
+    public static final SimpleParticleType BURST_IMPACT_PARTICLE = FabricParticleTypes.simple();
     public static void registerParticles(){
         Registry.register(Registries.PARTICLE_TYPE, Identifier.of(EffectiveWeapons.MOD_ID, "double_bow_crit"), DOUBLE_BOW_CRIT);
         Registry.register(Registries.PARTICLE_TYPE, Identifier.of(EffectiveWeapons.MOD_ID, "fire_guard_effect"), FIRE_GUARD_EFFECT);
@@ -21,5 +24,8 @@ public class EffectiveWeaponsParticles {
         Registry.register(Registries.PARTICLE_TYPE, Identifier.of(EffectiveWeapons.MOD_ID, "counter_effect"), COUNTER_EFFECT);
         Registry.register(Registries.PARTICLE_TYPE, Identifier.of(EffectiveWeapons.MOD_ID, "remote_counter_effect"), REMOTE_COUNTER_EFFECT);
         Registry.register(Registries.PARTICLE_TYPE, Identifier.of(EffectiveWeapons.MOD_ID, "isolated_effect"), ISOLATED_EFFECT);
+        Registry.register(Registries.PARTICLE_TYPE, Identifier.of(EffectiveWeapons.MOD_ID, "refresh_particle"), REFRESH_PARTICLE);
+        Registry.register(Registries.PARTICLE_TYPE, Identifier.of(EffectiveWeapons.MOD_ID, "resonance_particle"), RESONANCE_PARTICLE);
+        Registry.register(Registries.PARTICLE_TYPE, Identifier.of(EffectiveWeapons.MOD_ID, "burst_impact_particle"), BURST_IMPACT_PARTICLE);
     }
 }

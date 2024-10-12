@@ -1,7 +1,6 @@
 package net.br_matias_br.effectiveweapons.client;
 
-import net.br_matias_br.effectiveweapons.client.particle.CriticalHitParticle;
-import net.br_matias_br.effectiveweapons.client.particle.EffectiveWeaponsParticles;
+import net.br_matias_br.effectiveweapons.client.particle.*;
 import net.br_matias_br.effectiveweapons.entity.EffectiveWeaponsEntities;
 import net.br_matias_br.effectiveweapons.entity.client.*;
 import net.br_matias_br.effectiveweapons.item.EffectiveWeaponsItems;
@@ -16,6 +15,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.ArmorRenderer;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
+import net.minecraft.client.particle.EndRodParticle;
 import net.minecraft.client.particle.SpellParticle;
 
 public class EffectiveWeaponsClient implements ClientModInitializer {
@@ -32,6 +32,7 @@ public class EffectiveWeaponsClient implements ClientModInitializer {
         ArmorRenderer.register(new LapisCircletRenderer(), EffectiveWeaponsItems.LAPIS_CIRCLET);
         EntityModelLayerRegistry.registerModelLayer(EffectiveWeaponsModelLayers.LAPIS_CIRCLET, LapisCircletModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(EffectiveWeaponsModelLayers.BLADE_BEAM, BladeBeamModel::getTexturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(EffectiveWeaponsModelLayers.AREA_NO_EFFECT_CLOUD, AreaNoEffectCloudEntityModel::getTexturedModelData);
 
         ParticleFactoryRegistry.getInstance().register(EffectiveWeaponsParticles.DOUBLE_BOW_CRIT, CriticalHitParticle.Factory::new);
         ParticleFactoryRegistry.getInstance().register(EffectiveWeaponsParticles.FIRE_GUARD_EFFECT, SpellParticle.DefaultFactory::new);
@@ -39,6 +40,9 @@ public class EffectiveWeaponsClient implements ClientModInitializer {
         ParticleFactoryRegistry.getInstance().register(EffectiveWeaponsParticles.COUNTER_EFFECT, SpellParticle.DefaultFactory::new);
         ParticleFactoryRegistry.getInstance().register(EffectiveWeaponsParticles.REMOTE_COUNTER_EFFECT, SpellParticle.DefaultFactory::new);
         ParticleFactoryRegistry.getInstance().register(EffectiveWeaponsParticles.ISOLATED_EFFECT, SpellParticle.DefaultFactory::new);
+        ParticleFactoryRegistry.getInstance().register(EffectiveWeaponsParticles.REFRESH_PARTICLE, RefreshParticle.Factory::new);
+        ParticleFactoryRegistry.getInstance().register(EffectiveWeaponsParticles.RESONANCE_PARTICLE, ResonanceParticle.Factory::new);
+        ParticleFactoryRegistry.getInstance().register(EffectiveWeaponsParticles.BURST_IMPACT_PARTICLE, BurstImpactParticle.Factory::new);
 
         HandledScreens.register(EffectiveWeaponsScreenHandlers.ATTUNING_TABLE_SCREEN_HANDLER_TYPE, AttuningTableScreen::new);
     }

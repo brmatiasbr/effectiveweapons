@@ -95,6 +95,7 @@ public class LightShieldItem extends ShieldItem implements AttunableItem{
     @Override
     public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
         boolean controlHeld = Screen.hasControlDown();
+        boolean shiftHeld = Screen.hasShiftDown();
         String passiveAbility, meterAbility;
 
         NbtCompound compound = this.getCompoundOrDefault(stack);
@@ -102,19 +103,23 @@ public class LightShieldItem extends ShieldItem implements AttunableItem{
         meterAbility = compound.getString(EffectiveWeapons.METER_ABILITY);
 
         if(controlHeld){
-            tooltip.add(Text.translatable("tooltip.light_shield").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
-            tooltip.add(Text.translatable("tooltip.light_shield_cont").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
-            tooltip.add(Text.translatable(near ? "tooltip.close_shield" : "tooltip.distant_shield").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
-            this.buildCustomizationTooltip(tooltip, passiveAbility, meterAbility);
-            if(!meterAbility.equals(EffectiveWeapons.METER_NONE))
-                tooltip.add(Text.translatable((meterAbility.equals(METER_STAGGER) || meterAbility.equals(METER_REMOTE_COUNTER)) ? "tooltip.auto_meter" : "tooltip.sneak_meter").formatted(Formatting.ITALIC).formatted(Formatting.DARK_PURPLE));
-            tooltip.add(Text.translatable("tooltip.attuned_customization_enabled").formatted(Formatting.ITALIC).formatted(Formatting.BLUE));
+            if (shiftHeld) {
+                tooltip.add(Text.translatable("tooltip.light_shield").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
+                tooltip.add(Text.translatable("tooltip.light_shield_cont").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
+                tooltip.add(Text.translatable(near ? "tooltip.close_shield" : "tooltip.distant_shield").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
+                this.buildCustomizationTooltip(tooltip, passiveAbility, meterAbility);
+                if (!meterAbility.equals(EffectiveWeapons.METER_NONE))
+                    tooltip.add(Text.translatable((meterAbility.equals(METER_STAGGER) || meterAbility.equals(METER_REMOTE_COUNTER)) ? "tooltip.auto_meter" : "tooltip.sneak_meter").formatted(Formatting.ITALIC).formatted(Formatting.DARK_PURPLE));
+                tooltip.add(Text.translatable("tooltip.attuned_customization_enabled").formatted(Formatting.ITALIC).formatted(Formatting.BLUE));
+            } else {
+                tooltip.add(Text.translatable("tooltip.light_shield_summary").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
+                tooltip.add(Text.translatable(near ? "tooltip.close_shield_summary" : "tooltip.distant_shield_summary").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
+                this.buildCustomizationTooltip(tooltip, passiveAbility, meterAbility);
+                tooltip.add(Text.translatable("tooltip.more_info").formatted(Formatting.ITALIC).formatted(Formatting.BLUE));
+            }
         }
         else{
-            tooltip.add(Text.translatable("tooltip.light_shield_summary").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
-            tooltip.add(Text.translatable(near ? "tooltip.close_shield_summary" : "tooltip.distant_shield_summary").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
-            this.buildCustomizationTooltip(tooltip, passiveAbility, meterAbility);
-            tooltip.add(Text.translatable("tooltip.more_info").formatted(Formatting.ITALIC).formatted(Formatting.BLUE));
+            tooltip.add(Text.translatable("tooltip.show_weapon_summary").formatted(Formatting.ITALIC).formatted(Formatting.BLUE));
         }
     }
 

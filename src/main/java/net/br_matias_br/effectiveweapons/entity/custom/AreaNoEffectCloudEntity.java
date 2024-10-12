@@ -13,14 +13,18 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.data.DataTracker;
+import net.minecraft.entity.data.TrackedData;
+import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.util.TypeFilter;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 
 import java.util.Collection;
@@ -34,7 +38,8 @@ public class AreaNoEffectCloudEntity extends Entity {
     protected int initCountdown = 2;
     protected int highestDuration = 0;
     protected int gatheredCharge = 0;
-    protected boolean frigid = false;
+    private static final TrackedData<Boolean> FRIGID = DataTracker.registerData(AreaNoEffectCloudEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
+    private static final TrackedData<Boolean> GRAVITY = DataTracker.registerData(AreaNoEffectCloudEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
     private ItemStack weaponStack = null;
 
     public AreaNoEffectCloudEntity(EntityType<AreaNoEffectCloudEntity> entityType, World world) {
@@ -64,7 +69,12 @@ public class AreaNoEffectCloudEntity extends Entity {
 
     public AreaNoEffectCloudEntity(EntityType<AreaNoEffectCloudEntity> entityType, World world, int duration, Entity owner, double x, double y, double z, ItemStack weaponStack, boolean frigid) {
         this(entityType, world, duration, owner, x, y, z, weaponStack);
-        this.frigid = frigid;
+        this.setFrigid(frigid);
+    }
+
+    public AreaNoEffectCloudEntity(EntityType<AreaNoEffectCloudEntity> entityType, World world, int duration, Entity owner, double x, double y, double z, ItemStack weaponStack, boolean frigid, boolean gravity) {
+        this(entityType, world, duration, owner, x, y, z, weaponStack, frigid);
+        this.setGravityEnabled(gravity);
     }
 
     public ItemStack getWeaponStack(){
@@ -112,13 +122,19 @@ public class AreaNoEffectCloudEntity extends Entity {
         if(hasOwner) ownerInside = entitiesInside.remove(this.owner);
 
         if(!entitiesInside.isEmpty()){
-            String meterAbility = this.getWeaponPassiveAbility();
-            if(ownerInside && meterAbility.equals(DekajaTomeItem.PASSIVE_POWER_SWING)){
+            String passiveAbility = this.getWeaponPassiveAbility();
+            if(ownerInside && passiveAbility.equals(DekajaTomeItem.PASSIVE_POWER_SWING)){
                 if(this.owner instanceof LivingEntity){
                     activatePowerSwing = true;}
             }
             for(LivingEntity entity : entitiesInside){
-                if(this.frigid && entity.canFreeze()) {
+                if(this.isGravityEnabled()){
+                    entity.addVelocity(
+                            (this.getX() - entity.getX()) * 0.3,
+                            (this.getY() - entity.getY()) * 0.3,
+                            (this.getZ() - entity.getZ()) * 0.3);
+                }
+                if(this.isFrigid() && entity.canFreeze()) {
                     entity.setFrozenTicks(entity.getMinFreezeDamageTicks() + 400);
                 }
                 boolean entityHasTeam = entity.getScoreboardTeam() != null;
@@ -143,7 +159,7 @@ public class AreaNoEffectCloudEntity extends Entity {
                         entity.addStatusEffect(new StatusEffectInstance(StatusEffects.WEAKNESS, duration, 0, false, true, true));
                         entity.addStatusEffect(new StatusEffectInstance(StatusEffects.MINING_FATIGUE, duration, 0, false, true, true));
                     }
-                    else if(meterAbility.equals(DekajaTomeItem.PASSIVE_ISOLATION)){
+                    else if(passiveAbility.equals(DekajaTomeItem.PASSIVE_ISOLATION)){
                         entity.addStatusEffect(new StatusEffectInstance(EffectiveWeaponsEffects.ISOLATED_REGISTRY_ENTRY, 1200, 0, false, true, true));
                     }
                 }
@@ -156,6 +172,9 @@ public class AreaNoEffectCloudEntity extends Entity {
                 livingEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.HASTE, duration, 0, false, false, true));
             }
         }
+
+        this.createParticles();
+
         if(this.duration <= 0){
             if(this.weaponStack != null){
                 if(this.weaponStack.isOf(EffectiveWeaponsItems.DEKAJA_TOME)){
@@ -179,11 +198,31 @@ public class AreaNoEffectCloudEntity extends Entity {
         else this.duration--;
     }
 
+    protected void createParticles(){
+        Random r = this.getWorld().getRandom();
+        float width = this.getWidth()/2;
+        this.getWorld().addParticle(ParticleTypes.EFFECT,
+                this.getX() + (width * r.nextDouble() * (r.nextBoolean() ? 1 : -1)),
+                this.getY() + (this.getHeight() * r.nextDouble()),
+                this.getZ() + (width * r.nextDouble() * (r.nextBoolean() ? 1 : -1)),
+                0,0, 0);
+    }
+
     public String getWeaponPassiveAbility(){
         if(this.weaponStack != null){
             if(this.weaponStack.isOf(EffectiveWeaponsItems.DEKAJA_TOME)) {
                 NbtCompound compound = ((DekajaTomeItem) (this.weaponStack.getItem())).getCompoundOrDefault(this.weaponStack);
                 return compound.getString(EffectiveWeapons.PASSIVE_ABILITY);
+            }
+        }
+        return "";
+    }
+
+    public String getWeaponMeterAbility(){
+        if(this.weaponStack != null){
+            if(this.weaponStack.isOf(EffectiveWeaponsItems.DEKAJA_TOME)) {
+                NbtCompound compound = ((DekajaTomeItem) (this.weaponStack.getItem())).getCompoundOrDefault(this.weaponStack);
+                return compound.getString(EffectiveWeapons.METER_ABILITY);
             }
         }
         return "";
@@ -207,16 +246,35 @@ public class AreaNoEffectCloudEntity extends Entity {
 
     @Override
     protected void initDataTracker(DataTracker.Builder builder) {
-
+        builder.add(FRIGID, false);
+        builder.add(GRAVITY, false);
     }
 
     @Override
     protected void readCustomDataFromNbt(NbtCompound nbt) {
-
+        this.setFrigid(nbt.getBoolean("effectiveweapons:frigid"));
+        this.setGravityEnabled(nbt.getBoolean("effectiveweapons:gravity"));
     }
 
     @Override
     protected void writeCustomDataToNbt(NbtCompound nbt) {
+        nbt.putBoolean("effectiveweapons:frigid", this.isFrigid());
+        nbt.putBoolean("effectiveweapons:gravity", this.isGravityEnabled());
+    }
 
+    public boolean isFrigid(){
+        return this.dataTracker.get(FRIGID);
+    }
+
+    public void setFrigid(boolean frigid){
+        this.dataTracker.set(FRIGID, frigid);
+    }
+
+    public boolean isGravityEnabled(){
+        return this.dataTracker.get(GRAVITY);
+    }
+
+    public void setGravityEnabled(boolean gravity){
+        this.dataTracker.set(GRAVITY, gravity);
     }
 }

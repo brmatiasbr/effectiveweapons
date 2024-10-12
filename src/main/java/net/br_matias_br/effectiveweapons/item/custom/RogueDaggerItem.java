@@ -204,6 +204,7 @@ public class RogueDaggerItem extends DaggerItem implements AttunableItem{
         float cooldown = 0;
         ClientPlayerEntity player = MinecraftClient.getInstance().player;
         boolean controlHeld = Screen.hasControlDown();
+        boolean shiftHeld = Screen.hasShiftDown();
         String passiveAbility, meterAbility;
 
         NbtCompound compound = this.getCompoundOrDefault(stack);
@@ -218,25 +219,32 @@ public class RogueDaggerItem extends DaggerItem implements AttunableItem{
         NumberFormat formatter = new DecimalFormat("#0");
 
         if(controlHeld){
-            tooltip.add(Text.translatable("tooltip.rogue_dagger").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
-            tooltip.add(Text.translatable("tooltip.rogue_dagger_cont").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
-            tooltip.add(Text.translatable("tooltip.rogue_dagger_cont_part_two").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
-            tooltip.add(Text.translatable("tooltip.rogue_dagger_cooldown").formatted(Formatting.ITALIC).formatted(Formatting.BLUE));
-            tooltip.add(Text.translatable("tooltip.rogue_dagger_cooldown_cont").formatted(Formatting.ITALIC).formatted(Formatting.BLUE));
-            this.buildCustomizationTooltip(tooltip, passiveAbility, meterAbility);
-            if(!meterAbility.equals(EffectiveWeapons.METER_NONE)) {
-                switch (meterAbility){
-                    case METER_PURSUIT -> tooltip.add(Text.translatable("tooltip.use_meter").formatted(Formatting.ITALIC).formatted(Formatting.DARK_PURPLE));
-                    case METER_BLADE_BEAM -> tooltip.add(Text.translatable("tooltip.swing_meter").formatted(Formatting.ITALIC).formatted(Formatting.DARK_PURPLE));
-                    case METER_SNATCH -> tooltip.add(Text.translatable("tooltip.entity_meter").formatted(Formatting.ITALIC).formatted(Formatting.DARK_PURPLE));
+            if (shiftHeld) {
+                tooltip.add(Text.translatable("tooltip.rogue_dagger").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
+                tooltip.add(Text.translatable("tooltip.rogue_dagger_cont").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
+                tooltip.add(Text.translatable("tooltip.rogue_dagger_cont_part_two").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
+                tooltip.add(Text.translatable("tooltip.rogue_dagger_cooldown").formatted(Formatting.ITALIC).formatted(Formatting.BLUE));
+                tooltip.add(Text.translatable("tooltip.rogue_dagger_cooldown_cont").formatted(Formatting.ITALIC).formatted(Formatting.BLUE));
+                this.buildCustomizationTooltip(tooltip, passiveAbility, meterAbility);
+                if (!meterAbility.equals(EffectiveWeapons.METER_NONE)) {
+                    switch (meterAbility) {
+                        case METER_PURSUIT ->
+                                tooltip.add(Text.translatable("tooltip.use_meter").formatted(Formatting.ITALIC).formatted(Formatting.DARK_PURPLE));
+                        case METER_BLADE_BEAM ->
+                                tooltip.add(Text.translatable("tooltip.swing_meter").formatted(Formatting.ITALIC).formatted(Formatting.DARK_PURPLE));
+                        case METER_SNATCH ->
+                                tooltip.add(Text.translatable("tooltip.entity_meter").formatted(Formatting.ITALIC).formatted(Formatting.DARK_PURPLE));
+                    }
                 }
+                tooltip.add(Text.translatable("tooltip.attuned_customization_enabled").formatted(Formatting.ITALIC).formatted(Formatting.BLUE));
+            } else {
+                tooltip.add(Text.translatable("tooltip.rogue_dagger_summary").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
+                this.buildCustomizationTooltip(tooltip, passiveAbility, meterAbility);
+                tooltip.add(Text.translatable("tooltip.more_info").formatted(Formatting.ITALIC).formatted(Formatting.BLUE));
             }
-            tooltip.add(Text.translatable("tooltip.attuned_customization_enabled").formatted(Formatting.ITALIC).formatted(Formatting.BLUE));
         }
         else{
-            tooltip.add(Text.translatable("tooltip.rogue_dagger_summary").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
-            this.buildCustomizationTooltip(tooltip, passiveAbility, meterAbility);
-            tooltip.add(Text.translatable("tooltip.more_info").formatted(Formatting.ITALIC).formatted(Formatting.BLUE));
+            tooltip.add(Text.translatable("tooltip.show_weapon_summary").formatted(Formatting.ITALIC).formatted(Formatting.BLUE));
         }
         if(onCooldown) tooltip.add(Text.literal("Remaining cooldown: " + formatter.format(cooldown * 100) + "%").formatted(Formatting.ITALIC).formatted(Formatting.RED));
         super.appendTooltip(stack, context, tooltip, type);

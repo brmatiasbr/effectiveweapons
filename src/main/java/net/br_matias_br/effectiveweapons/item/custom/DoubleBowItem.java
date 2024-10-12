@@ -211,6 +211,7 @@ public class DoubleBowItem extends BowItem implements AttunableItem{
     @Override
     public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
         boolean controlHeld = Screen.hasControlDown();
+        boolean shiftHeld = Screen.hasShiftDown();
         String passiveAbility, meterAbility;
 
         NbtCompound compound = this.getCompoundOrDefault(stack);
@@ -218,22 +219,25 @@ public class DoubleBowItem extends BowItem implements AttunableItem{
         meterAbility = compound.getString(EffectiveWeapons.METER_ABILITY);
 
         if(controlHeld){
-            tooltip.add(Text.translatable("tooltip.double_bow").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
-            tooltip.add(Text.translatable("tooltip.double_bow_cont").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
-            tooltip.add(Text.translatable("tooltip.double_bow_cont_part_two").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
-            tooltip.add(Text.translatable("tooltip.double_bow_cont_part_three").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
-            tooltip.add(Text.translatable("tooltip.double_bow_damage").formatted(Formatting.ITALIC).formatted(Formatting.BLUE));
-            this.buildCustomizationTooltip(tooltip, passiveAbility, meterAbility);
-            if(!meterAbility.equals(EffectiveWeapons.METER_NONE))
-                tooltip.add(Text.translatable( meterAbility.equals(METER_HEROIC_SPIRIT) ? "tooltip.air_meter" : "tooltip.auto_meter").formatted(Formatting.ITALIC).formatted(Formatting.DARK_PURPLE));
-            tooltip.add(Text.translatable("tooltip.attuned_customization_enabled").formatted(Formatting.ITALIC).formatted(Formatting.BLUE));
+            if (shiftHeld) {
+                tooltip.add(Text.translatable("tooltip.double_bow").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
+                tooltip.add(Text.translatable("tooltip.double_bow_cont").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
+                tooltip.add(Text.translatable("tooltip.double_bow_cont_part_two").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
+                tooltip.add(Text.translatable("tooltip.double_bow_cont_part_three").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
+                tooltip.add(Text.translatable("tooltip.double_bow_damage").formatted(Formatting.ITALIC).formatted(Formatting.BLUE));
+                this.buildCustomizationTooltip(tooltip, passiveAbility, meterAbility);
+                if (!meterAbility.equals(EffectiveWeapons.METER_NONE))
+                    tooltip.add(Text.translatable(meterAbility.equals(METER_HEROIC_SPIRIT) ? "tooltip.air_meter" : "tooltip.auto_meter").formatted(Formatting.ITALIC).formatted(Formatting.DARK_PURPLE));
+                tooltip.add(Text.translatable("tooltip.attuned_customization_enabled").formatted(Formatting.ITALIC).formatted(Formatting.BLUE));
+            } else {
+                tooltip.add(Text.translatable("tooltip.double_bow_summary").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
+                this.buildCustomizationTooltip(tooltip, passiveAbility, meterAbility);
+                tooltip.add(Text.translatable("tooltip.more_info").formatted(Formatting.ITALIC).formatted(Formatting.BLUE));
+            }
         }
         else{
-            tooltip.add(Text.translatable("tooltip.double_bow_summary").formatted(Formatting.ITALIC).formatted(Formatting.GRAY));
-            this.buildCustomizationTooltip(tooltip, passiveAbility, meterAbility);
-            tooltip.add(Text.translatable("tooltip.more_info").formatted(Formatting.ITALIC).formatted(Formatting.BLUE));
+            tooltip.add(Text.translatable("tooltip.show_weapon_summary").formatted(Formatting.ITALIC).formatted(Formatting.BLUE));
         }
-        super.appendTooltip(stack, context, tooltip, type);
     }
 
     @Override

@@ -57,8 +57,9 @@
   "death.attack.blade_beam_damage":               "%1$s got slashed by a blade beam",
   "death.attack.blade_beam_damage.player":        "%1$s got slashed by %2$s's blade beam",
 
-  "tooltip.cooldown_info": "Hold §eSHIFT§r to show cooldown info",
-  "tooltip.more_info":     "Hold §eCONTROL§r to show more information",
+  "tooltip.cooldown_info":           "Hold §eSHIFT§r to show cooldown info",
+  "tooltip.show_weapon_summary":     "Hold §eCONTROL§r to show summary",
+  "tooltip.more_info":               "Hold §eSHIFT§r to show more information",
 
   "tooltip.spiraling_sword_summary":           "Can extend user's status effects",
   "tooltip.spiraling_sword":                   "Extends user's status effects after",
@@ -89,11 +90,11 @@
   "tooltip.dekaja_tome_cooldown":       "Cooldown = 75 % of the highest",
   "tooltip.dekaja_tome_cooldown_cont":  "duration among neutralized effects",
 
-  "tooltip.pact_axe_summary":        "Deals triple damage, but can backfire",
-  "tooltip.pact_axe":                "Each attack can inflict §edouble§r the user's",
-  "tooltip.pact_axe_cont":           "attack as extra damage, but there is a chance",
-  "tooltip.pact_axe_cont_part_two":  "the bonus damage may §ebe inflicted on its§r",
-  "tooltip.pact_axe_cont_part_three":"§eown user§r or §eremove one of their active effects§r",
+  "tooltip.pact_axe_summary":        "Deals a lot of damage quick, but can backfire",
+  "tooltip.pact_axe":                "Each attack deals high damage, but there is a chance",
+  "tooltip.pact_axe_cont":           "that all the damage is §einflicted on its§r",
+  "tooltip.pact_axe_cont_part_two":  "§eown user§r. If §eany positive effects§r are active on user,",
+  "tooltip.pact_axe_cont_part_three":"backfires deal §ehalf damage§r, but §eremove§r one of the effects",
   "tooltip.pact_axe_cont_part_four": "Awards the user with extra experience points",
   "tooltip.pact_axe_backfire":       "Backfire chance = 20%",
 
@@ -106,7 +107,7 @@
 
   "tooltip.lapis_circlet":                      "Grants user a random positive",
   "tooltip.lapis_circlet_cont":                 "status effect every 10 seconds",
-  "tooltip.lapis_circlet_exceptions_prompt":    "Hold §eCONTROL§r to show exceptions",
+  "tooltip.lapis_circlet_exceptions_prompt":    "Hold §eSHIFT§r to show exceptions",
   "tooltip.lapis_circlet_exceptions":           "Health boost, invisibility, saturation",
   "tooltip.lapis_circlet_exceptions_part_two":  "and instant health §ecannot§r be granted",
 
@@ -160,7 +161,7 @@
   "tooltip.passive_acrobatics":                    "Passive: §bAcrobatics§r",
   "tooltip.passive_stabbing":                      "Passive: §4Stabbing§r",
   "tooltip.passive_mobile":                        "Passive: §aMobile§r",
-  "tooltip.passive_power_swing":                   "Passive: §6Power Swing§r",
+  "tooltip.passive_power_swing":                   "Passive: §4Power Swing§r",
   "tooltip.passive_isolation":                     "Passive: §cIsolation§r",
   "tooltip.meter_none":                            "Meter: §7none§r",
   "tooltip.meter_fire_guard":                      "Meter: §cFire Guard§r",
@@ -184,6 +185,7 @@
   "tooltip.meter_pursuit":                         "Meter: §1Pursuit§r",
   "tooltip.meter_snatch":                          "Meter: §cSnatch§r",
   "tooltip.meter_repulsion":                       "Meter: §fRepulsion§r",
+  "tooltip.meter_gravity":                         "Meter: §6Gravity§r",
 
   "message.passive_ability":                       "Passive",
   "message.meter_ability":                         "Meter",
@@ -207,7 +209,7 @@
   "message.passive_acrobatics":                    "§bAcrobatics§r",
   "message.passive_stabbing":                      "§4Stabbing§r",
   "message.passive_mobile":                        "§aMobile§r",
-  "message.passive_power_swing":                   "§6Power Swing§r",
+  "message.passive_power_swing":                   "§4Power Swing§r",
   "message.passive_isolation":                     "§cIsolation§r",
   "message.meter_fire_guard":                      "§cFire Guard§r",
   "message.meter_lunge":                           "§bLunge§r",
@@ -230,6 +232,7 @@
   "message.meter_pursuit":                         "§1Pursuit§r",
   "message.meter_snatch":                          "§cSnatch§r",
   "message.meter_repulsion":                       "§fRepulsion§r",
+  "message.meter_gravity":                         "§6Gravity§r",
 
   "tooltip.passive_featherweight_explanation":     "Increases user's safe fall height by 3 blocks",
   "tooltip.passive_stride_explanation":            "Increases user's step height to 1 block",
@@ -272,6 +275,7 @@
   "tooltip.meter_pursuit_explanation":             "User dashes in the direction of nearest entity. Charges quicker with each attack. 2 dashes can be executed with a full charge",
   "tooltip.meter_snatch_explanation":              "Allows user to steal positive effects from another entity without damaging them by using the dagger on them. Charges quicker with each attack. Ignores cooldown",
   "tooltip.meter_repulsion_explanation":           "Automatically charges. Swinging the tome summons a wind charge in front of the user. A full charge can summon 2 wind charges",
+  "tooltip.meter_gravity_explanation":             "Makes it so all entities caught by the cloud are dragged towards its center",
 
   "message.attuning_error":                        "Could not apply modifier: item does not support attuning",
   "message.reset":                                 "Reset",

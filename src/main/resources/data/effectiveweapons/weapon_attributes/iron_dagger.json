@@ -1,0 +1,6 @@
+{
+  "parent": "bettercombat:dagger",
+  "attributes": {
+    "pose": "bettercombat:pose_one_handed_backwards"
+  }
+}
